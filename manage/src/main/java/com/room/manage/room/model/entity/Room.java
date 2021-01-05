@@ -1,7 +1,5 @@
-package com.room.manage.room.model;
+package com.room.manage.room.model.entity;
 
-import com.room.manage.room.exception.AlreadyMaximumParticipantException;
-import com.room.manage.user.model.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

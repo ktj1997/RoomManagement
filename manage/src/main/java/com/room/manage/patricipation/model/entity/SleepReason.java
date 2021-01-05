@@ -1,4 +1,4 @@
-package com.room.manage.sleep.model;
+package com.room.manage.patricipation.model.entity;
 
 public enum SleepReason {
     TOILET, MEAL, CLASS, OTHER

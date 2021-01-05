@@ -1,4 +1,4 @@
-package com.room.manage.sleep.exception;
+package com.room.manage.patricipation.exception;
 
 public class SleepRequestDenyException extends RuntimeException{
     public SleepRequestDenyException()
