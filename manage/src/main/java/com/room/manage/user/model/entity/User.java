@@ -1,6 +1,7 @@
 package com.room.manage.user.model.entity;
 
 import com.room.manage.patricipation.model.entity.Participation;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     /**
