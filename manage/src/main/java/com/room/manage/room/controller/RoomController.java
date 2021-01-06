@@ -21,7 +21,7 @@ public class RoomController {
     @GetMapping("/info")
     public RoomInfoDto getRoomInfo(@RequestParam Long roomId)
     {
-        return roomService.getRoomInfo(roomId);
+       return null;
     }
 
 }

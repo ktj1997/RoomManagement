@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -24,14 +21,17 @@ public class User {
     /**
      * 유저 ID
      */
+    @Column(length = 12,nullable = false)
     String userName;
     /**
      * 유저 비밀번호
      */
+    @Column(length = 20,nullable = false)
     String password;
     /**
      * 유저 이름
      */
+    @Column(length = 10,nullable = false)
     String name;
 
     @ManyToOne

@@ -48,7 +48,6 @@ public class ParticipationInfoDto {
     private Sleep sleep;
 
     public ParticipationInfoDto(Participation participation){
-        this.roomId = participation.getRoom().getId();
         this.floor = participation.getRoom().getFloor();
         this.field = participation.getRoom().getField();
         this.startTime = participation.getStartTime();

@@ -1,6 +1,7 @@
 package com.room.manage.room.model.dto;
 
 import com.room.manage.room.model.entity.Room;
+import com.room.manage.room.model.entity.RoomId;
 import com.room.manage.room.model.entity.RoomType;
 import com.room.manage.user.model.dto.UserInfoDto;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class RoomInfoDto {
     /**
      * Room 식별자
      */
-    private Long id;
+    private RoomId id;
 
     /**
      * 층
@@ -46,7 +47,6 @@ public class RoomInfoDto {
     private List<UserInfoDto> participants;
 
     public RoomInfoDto(Room room, List<UserInfoDto> participants){
-        this.id = room.getId();
         this.floor = room.getFloor();
         this.field = room.getField();
         this.maxNum = room.getMaxNum();

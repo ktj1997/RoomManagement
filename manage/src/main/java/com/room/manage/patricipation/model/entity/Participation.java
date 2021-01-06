@@ -21,11 +21,13 @@ public class Participation {
     /**
      * 시작 시간
      */
+    @Column(nullable = false)
     private Date startTime = new Date();
 
     /**
      *  종료 시간
      */
+    @Column(nullable = false)
     private Date finishTime;
 
     /**
@@ -51,6 +53,10 @@ public class Participation {
      * 참여하고 있는 방
      */
     @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "floor",referencedColumnName = "floor"),
+            @JoinColumn(name= "field",referencedColumnName = "field")
+    })
     Room room;
 
     /**

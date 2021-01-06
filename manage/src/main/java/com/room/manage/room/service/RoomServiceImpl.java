@@ -26,15 +26,4 @@ public class RoomServiceImpl implements RoomService{
      * @param roomId Room식별자
      * @return RoomInfoDto
      */
-    @Override
-    public RoomInfoDto getRoomInfo(Long roomId) {
-        Room room = roomRepository.findById(roomId).orElseThrow(RoomNotExistException::new);
-        List<Participation> participations = participationRepository.findAllByRoom_Id(roomId);
-        List<UserInfoDto> participants = participations.stream().flatMap(participation ->
-                participation.getParticipants().stream().map(UserInfoDto::new))
-                .collect(Collectors.toList());
-
-        return new RoomInfoDto(room,participants);
-
-    }
 }

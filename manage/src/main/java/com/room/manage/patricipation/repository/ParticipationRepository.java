@@ -7,5 +7,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ParticipationRepository extends JpaRepository<Participation,Long> {
-    List<Participation> findAllByRoom_Id(Long id);
 }
