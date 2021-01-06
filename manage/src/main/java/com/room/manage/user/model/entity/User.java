@@ -2,6 +2,7 @@ package com.room.manage.user.model.entity;
 
 import com.room.manage.patricipation.model.entity.Participation;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,4 +37,12 @@ public class User {
 
     @ManyToOne
     Participation participation;
+
+    @Builder
+    public User(String userName, String password, String name)
+    {
+        this.userName = userName;
+        this.password = password;
+        this.name = name;
+    }
 }

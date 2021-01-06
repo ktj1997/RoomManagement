@@ -74,10 +74,11 @@ public class Participation {
     }
 
     @Builder
-    public Participation(User user, Date finishTime)
+    public Participation(User user, Date finishTime,Room room)
     {
         addParticipant(user);
-        finishTime = finishTime;
+        this.finishTime = finishTime;
+        this.room = room;
     }
 
 

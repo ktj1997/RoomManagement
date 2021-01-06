@@ -1,30 +1,27 @@
 package com.room.manage.patricipation.controller;
 
+import com.room.manage.patricipation.model.dto.ParticipationRequestDto;
+import com.room.manage.patricipation.repository.ParticipationRepository;
+import com.room.manage.patricipation.service.ParticipationService;
+import com.room.manage.room.model.entity.RoomType;
 import com.sun.istack.Nullable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/participation")
+@RequiredArgsConstructor
 public class ParticipationController {
 
-    /**
-     * 입실
-     * @param roomId Room식별자
-     * @param participants 참여 인원(GroupRoom 일경우)
-     */
-    @GetMapping
-    public void makeParticipation(@RequestParam Long roomId, @Nullable @RequestParam int participants)
-    {
-
-    }
+    private final ParticipationService participationService;
 
     /**
-     * 퇴실
-     * @param roomId
+     * 방 참여
+     * @param participationRequestDto 참여에 필요한 정보
      */
-    @DeleteMapping
-    public void cancelParticipation(@RequestParam Long roomId)
+    @PostMapping
+    public void makeParticipation(@RequestBody ParticipationRequestDto participationRequestDto)
     {
-
+        participationService.joinRoom(participationRequestDto);
     }
 }

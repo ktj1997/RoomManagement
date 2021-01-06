@@ -4,6 +4,7 @@ import com.room.manage.patricipation.model.entity.Participation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class Room {
     @Column(nullable = false,length = 2)
     private int maxNum;
 
+    @Setter
     @Column(nullable = false,length = 2)
     private int nowNum;
 
@@ -40,13 +42,47 @@ public class Room {
     @OneToMany(mappedBy = "room")
     List<Participation> participates = new ArrayList<>();
 
-    @Builder
-    public Room(int maxNum,String floor,String field,RoomType type)
+    /**
+     * 개인 방 일 때 참여가능 여부
+     * @return
+     */
+    public boolean canJoin()
     {
-        this.maxNum = maxNum;
-        this.floor = floor;
-        this.type = type;
-        this.field = field;
+        if(nowNum<maxNum)
+            return true;
+        return false;
     }
+
+    /**
+     * 그룹 방 일 때 참여 가능 여부
+     * @param participants 참가자 수
+     * @return
+     */
+    public boolean canJoin(int participants)
+    {
+        if(nowNum+participants < maxNum)
+            return true;
+        return false;
+    }
+
+    /**
+     * 개인 방 일때 참여
+     */
+    public void join()
+    {
+        this.nowNum++;
+        this.status = Status.ACTIVATE;
+    }
+
+    /**
+     * 그룹 방일 때 참여
+     * @param participants
+     */
+    public void join(int participants)
+    {
+        this.nowNum = this.nowNum + participants;
+        this.status = Status.ACTIVATE;
+    }
+
 
 }
