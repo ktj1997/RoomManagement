@@ -41,13 +41,8 @@ public class Participation {
      */
     private int remainSleepNum = 3;
 
-    /**
-     *  참여자, 개인방이면 개인들의 목록,
-     *  그룹방이면 대표자 한명
-     *  1:1~N
-     */
-    @OneToMany(mappedBy = "participation")
-    private List<User> participants = new ArrayList<>();
+    @OneToOne
+    User participant;
 
     /**
      * 참여하고 있는 방
@@ -65,22 +60,16 @@ public class Participation {
     @Embedded
     Sleep sleep = null;
 
-    public void addParticipant(User user){
-        participants.add(user);
-    }
-
     public void toSleepStatus(Sleep sleep){
         this.sleep = sleep;
     }
 
     @Builder
-    public Participation(User user, Date finishTime,Room room)
+    public Participation(User user, Date finishTime,Room room,ParticipationType type)
     {
-        addParticipant(user);
+        this.participant = user;
         this.finishTime = finishTime;
         this.room = room;
+        this.participationType = type;
     }
-
-
-
 }

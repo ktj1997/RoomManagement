@@ -1,10 +1,12 @@
 package com.room.manage.room.model.entity;
 
 import com.room.manage.patricipation.model.entity.Participation;
+import com.room.manage.user.model.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.event.service.internal.EventListenerServiceInitiator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,8 +31,13 @@ public class Room {
 
     @Setter
     @Column(nullable = false,length = 2)
-    private int nowNum;
+    private int sleepNum=0;
 
+    @Setter
+    @Column(nullable = false,length = 2)
+    private int nowNum=0;
+
+    @Setter
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private Status status = Status.EMPTY;
@@ -43,46 +50,23 @@ public class Room {
     List<Participation> participates = new ArrayList<>();
 
     /**
-     * 개인 방 일 때 참여가능 여부
-     * @return
+     * 대표자 (개인 방은 null, 그룹 방은 필수)
      */
-    public boolean canJoin()
-    {
-        if(nowNum<maxNum)
-            return true;
-        return false;
-    }
+    @Setter
+    @OneToOne
+    User delegate = null;
 
     /**
-     * 그룹 방 일 때 참여 가능 여부
-     * @param participants 참가자 수
-     * @return
+     * 퇴실
      */
-    public boolean canJoin(int participants)
+    public void exit()
     {
-        if(nowNum+participants < maxNum)
-            return true;
-        return false;
+        if(nowNum <= 0)
+            throw new RuntimeException("현재 참여인원수가 음수가 될 수 없습니다.");
+        else{
+            nowNum -- ;
+            if(nowNum == 0)
+                status = Status.EMPTY;
+        }
     }
-
-    /**
-     * 개인 방 일때 참여
-     */
-    public void join()
-    {
-        this.nowNum++;
-        this.status = Status.ACTIVATE;
-    }
-
-    /**
-     * 그룹 방일 때 참여
-     * @param participants
-     */
-    public void join(int participants)
-    {
-        this.nowNum = this.nowNum + participants;
-        this.status = Status.ACTIVATE;
-    }
-
-
 }

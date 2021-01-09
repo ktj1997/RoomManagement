@@ -10,6 +10,4 @@ public class ParticipationRequestDto{
     Long userId;
     String floor;
     String field;
-    RoomType roomType;
-    int participantsNum;
 }
