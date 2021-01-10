@@ -19,11 +19,11 @@ import java.util.List;
 public class Room {
 
     @Id
-    @Column(length = 1)
+    @Column(length = 2)
     private String floor;
 
     @Id
-    @Column(length = 1)
+    @Column(length = 2)
     private String field;
 
     @Column(nullable = false,length = 2)

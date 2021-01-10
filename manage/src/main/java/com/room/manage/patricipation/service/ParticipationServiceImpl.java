@@ -2,6 +2,7 @@ package com.room.manage.patricipation.service;
 
 import com.room.manage.patricipation.exception.NoSuchParticipationException;
 import com.room.manage.patricipation.exception.RoomTypeNotMatchedException;
+import com.room.manage.patricipation.exception.SleepRequestDenyException;
 import com.room.manage.patricipation.model.dto.ParticipationRequestDto;
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.model.entity.ParticipationType;
@@ -123,11 +124,12 @@ public class ParticipationServiceImpl implements ParticipationService{
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
 
-        Sleep sleep = new Sleep(new Date(),sleepReason);
-        room.setSleepNum(room.getSleepNum() + 1);
-        participation.toSleepStatus(sleep);
-
-        if(room.getSleepNum() == 0)
-            room.setStatus(Status.SLEEP);
+        if(participation.getRemainSleepNum()>0){
+            room.setSleepNum(room.getSleepNum() + 1);
+            if(room.getSleepNum() == 0)
+                room.setStatus(Status.SLEEP);
+            participation.setSleep(new Sleep(new Date(),sleepReason));
+        }else
+            throw new SleepRequestDenyException();
     }
 }

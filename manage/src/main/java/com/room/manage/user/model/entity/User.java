@@ -35,9 +35,6 @@ public class User {
     @Column(length = 10,nullable = false)
     String name;
 
-    @ManyToOne
-    Participation participation;
-
     @Builder
     public User(String userName, String password, String name)
     {
