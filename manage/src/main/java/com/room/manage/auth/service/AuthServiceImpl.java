@@ -15,12 +15,12 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     @Transactional
-    public void signUp(SignUpRequestDto signUpRequestDto) {
+    public User signUp(SignUpRequestDto signUpRequestDto) {
         User user = User.builder()
                 .userName(signUpRequestDto.getUserName())
                 .password(signUpRequestDto.getPassword())
                 .name(signUpRequestDto.getName()).build();
 
-        userRepository.save(user);
+       return userRepository.save(user);
     }
 }

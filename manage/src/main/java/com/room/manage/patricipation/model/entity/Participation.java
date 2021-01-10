@@ -5,11 +5,10 @@ import com.room.manage.user.model.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
@@ -57,12 +56,10 @@ public class Participation {
     /**
      * 부재 정보
      */
+    @Setter
     @Embedded
     Sleep sleep = null;
 
-    public void toSleepStatus(Sleep sleep){
-        this.sleep = sleep;
-    }
 
     @Builder
     public Participation(User user, Date finishTime,Room room,ParticipationType type)
