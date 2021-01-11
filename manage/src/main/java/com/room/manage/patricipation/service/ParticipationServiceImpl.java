@@ -3,6 +3,7 @@ package com.room.manage.patricipation.service;
 import com.room.manage.patricipation.exception.NoSuchParticipationException;
 import com.room.manage.patricipation.exception.RoomTypeNotMatchedException;
 import com.room.manage.patricipation.exception.SleepRequestDenyException;
+import com.room.manage.patricipation.model.dto.ExtendTimeRequestDto;
 import com.room.manage.patricipation.model.dto.ParticipationRequestDto;
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.model.entity.ParticipationType;
@@ -18,6 +19,7 @@ import com.room.manage.room.repository.RoomRepository;
 import com.room.manage.user.exception.UserNotExistException;
 import com.room.manage.user.model.entity.User;
 import com.room.manage.user.repository.UserRepository;
+import com.room.manage.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,14 +45,17 @@ public class ParticipationServiceImpl implements ParticipationService{
                 .orElseThrow(UserNotExistException::new);
 
         if(room.getType() == RoomType.GROUP){
+            if(room.canJoin())
+            {
                 if(room.getStatus() == Status.EMPTY){
                     room.setDelegate(user);
                     Participation participation = Participation.builder()
                             .user(user)
-                            .finishTime(new Date())
+                            .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
                             .type(ParticipationType.ACTIVE)
                             .room(room).build();
                     participationRepository.save(participation);
+                    room.join();
                 }else{
                     /**
                      * 참가요청 만들기 --> 성공시 들여보내고, 아니면 거부
@@ -61,29 +66,30 @@ public class ParticipationServiceImpl implements ParticipationService{
                     if(true){
                         Participation participation = Participation.builder()
                                 .user(user)
-                                .finishTime(new Date())
+                                .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
                                 .type(ParticipationType.ACTIVE)
                                 .room(room).build();
                         participationRepository.save(participation);
+                        room.join();
                     }else{
 
                     }
                 }
+            }
+            else
+                throw new AlreadyMaximumParticipantException();
         } else{
-            if(room.getNowNum()+1 <= room.getMaxNum()){
-                if(room.getStatus() == Status.EMPTY)
-                    room.setStatus(Status.ACTIVATE);
-
+            if(room.canJoin()){
                 List<Participation> otherParticipates = participationRepository
                         .findAllByRoom_FloorAndRoom_Floor(participationRequestDto.getFloor(),participationRequestDto.getField());
 
                 Participation participation = Participation.builder()
                         .user(user)
-                        .finishTime(new Date())
+                        .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
                         .type(ParticipationType.ACTIVE)
                         .room(room).build();
                 participationRepository.save(participation);
-
+                room.join();
                 /**
                  *  개인방의 모든 인원들에게 알림 보내기.
                  *  SSE 공부하자
@@ -131,5 +137,17 @@ public class ParticipationServiceImpl implements ParticipationService{
             participation.setSleep(new Sleep(new Date(),sleepReason));
         }else
             throw new SleepRequestDenyException();
+    }
+
+    /**
+     * 현재 참여하고 있을 때, 시간 추가
+     * @param extendTimeRequestDto
+     */
+    @Override
+    public void extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
+        User user = userRepository.findById(extendTimeRequestDto.getUserId()).orElseThrow(UserNotExistException::new);
+        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
+
+        participation.setFinishTime(DateUtil.plusTime(participation.getFinishTime(),extendTimeRequestDto.getHour(),extendTimeRequestDto.getMinute()));
     }
 }

@@ -26,6 +26,7 @@ public class Participation {
     /**
      *  종료 시간
      */
+    @Setter
     @Column(nullable = false)
     private Date finishTime;
 

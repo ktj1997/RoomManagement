@@ -20,10 +20,15 @@ public class RoomServiceImpl implements RoomService{
     private final RoomRepository roomRepository;
     private final ParticipationRepository participationRepository;
 
-
     /**
      * 해당 Room의 정보
-     * @param roomId Room식별자
+     * @param floor Room식별자 floor
+     * @param field Rom 식별자 field
      * @return RoomInfoDto
      */
+    @Override
+    public RoomInfoDto getRoomInfo(String floor,String field) {
+        Room room = roomRepository.findByFloorAndField(floor,field).orElseThrow(RoomNotExistException::new);
+        return new RoomInfoDto(room);
+    }
 }

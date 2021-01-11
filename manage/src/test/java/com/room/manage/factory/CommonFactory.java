@@ -11,4 +11,8 @@ public class CommonFactory {
 
     @Autowired
     public ParticipationFactory participationFactory;
+
+    @Autowired
+    public RoomFactory roomFactory;
+
 }

@@ -69,4 +69,18 @@ public class Room {
                 status = Status.EMPTY;
         }
     }
+
+    /**
+     * 입실
+     */
+    public void join()
+    {
+        if(nowNum==0)
+            status = Status.ACTIVATE;
+        nowNum++;
+    }
+    public boolean canJoin()
+    {
+        return this.nowNum+1 <= this.maxNum;
+    }
 }
