@@ -1,16 +1,19 @@
-package com.room.manage.patricipation.model.dto;
+package com.room.manage.patricipation.model.dto.response;
 
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.model.entity.ParticipationType;
 import com.room.manage.patricipation.model.entity.Sleep;
+import com.room.manage.util.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Getter
 @AllArgsConstructor
-public class ParticipationInfoDto {
+@ToString
+public class ParticipationResponseDto {
     /**
      * 참여하는 Room의 식별자
      */
@@ -27,11 +30,11 @@ public class ParticipationInfoDto {
     /**
      * 시작 시간
      */
-    private Date startTime;
+    private String startTime;
     /**
      * 종료 시간
      */
-    private Date finishTime;
+    private String finishTime;
     /**
      * 남은 부재가능 횟수
      */
@@ -47,11 +50,11 @@ public class ParticipationInfoDto {
      */
     private Sleep sleep;
 
-    public ParticipationInfoDto(Participation participation){
+    public ParticipationResponseDto(Participation participation){
         this.floor = participation.getRoom().getFloor();
         this.field = participation.getRoom().getField();
-        this.startTime = participation.getStartTime();
-        this.finishTime = participation.getFinishTime();
+        this.startTime = DateUtil.formatToString(participation.getStartTime());
+        this.finishTime = DateUtil.formatToString(participation.getFinishTime());
         this.remainSleepNum = participation.getRemainSleepNum();
         this.participationType = participation.getParticipationType();
         this.sleep = participation.getSleep();

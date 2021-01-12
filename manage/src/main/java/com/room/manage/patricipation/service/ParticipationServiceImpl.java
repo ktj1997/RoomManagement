@@ -1,14 +1,17 @@
 package com.room.manage.patricipation.service;
 
+import com.room.manage.patricipation.exception.AlreadySleepStatusException;
 import com.room.manage.patricipation.exception.NoSuchParticipationException;
-import com.room.manage.patricipation.exception.RoomTypeNotMatchedException;
 import com.room.manage.patricipation.exception.SleepRequestDenyException;
-import com.room.manage.patricipation.model.dto.ExtendTimeRequestDto;
-import com.room.manage.patricipation.model.dto.ParticipationRequestDto;
+import com.room.manage.patricipation.exception.SleepTimeCannotExceedFinishTimeException;
+import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
+import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.patricipation.model.dto.response.SleepInfoResponseDto;
+import com.room.manage.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.model.entity.ParticipationType;
 import com.room.manage.patricipation.model.entity.Sleep;
-import com.room.manage.patricipation.model.entity.SleepReason;
 import com.room.manage.patricipation.repository.ParticipationRepository;
 import com.room.manage.room.exception.AlreadyMaximumParticipantException;
 import com.room.manage.room.exception.RoomNotExistException;
@@ -26,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,18 +40,18 @@ public class ParticipationServiceImpl implements ParticipationService{
     private final ParticipationRepository participationRepository;
 
     @Override
-    public void joinRoom(ParticipationRequestDto participationRequestDto) {
+    public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto) {
         Room room = roomRepository.findByFloorAndField(participationRequestDto.getFloor(), participationRequestDto.getField())
                 .orElseThrow(RoomNotExistException::new);
         User user = userRepository.findById(participationRequestDto.getUserId())
                 .orElseThrow(UserNotExistException::new);
-
+        Participation participation;
         if(room.getType() == RoomType.GROUP){
             if(room.canJoin())
             {
                 if(room.getStatus() == Status.EMPTY){
                     room.setDelegate(user);
-                    Participation participation = Participation.builder()
+                    participation = Participation.builder()
                             .user(user)
                             .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
                             .type(ParticipationType.ACTIVE)
@@ -64,7 +66,7 @@ public class ParticipationServiceImpl implements ParticipationService{
                     System.out.format("%s 님 %s 님이 참여요청 중입니다. 승낙 하시겠습니까? (Y/N)"
                             ,room.getDelegate().getName(),user.getName());
                     if(true){
-                        Participation participation = Participation.builder()
+                        participation = Participation.builder()
                                 .user(user)
                                 .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
                                 .type(ParticipationType.ACTIVE)
@@ -83,7 +85,7 @@ public class ParticipationServiceImpl implements ParticipationService{
                 List<Participation> otherParticipates = participationRepository
                         .findAllByRoom_FloorAndRoom_Floor(participationRequestDto.getFloor(),participationRequestDto.getField());
 
-                Participation participation = Participation.builder()
+                participation = Participation.builder()
                         .user(user)
                         .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
                         .type(ParticipationType.ACTIVE)
@@ -99,6 +101,7 @@ public class ParticipationServiceImpl implements ParticipationService{
             }else
                 throw new AlreadyMaximumParticipantException();
         }
+        return new ParticipationResponseDto(participation);
     }
 
     /**
@@ -121,20 +124,29 @@ public class ParticipationServiceImpl implements ParticipationService{
     /**
      * Sleep 상태로 바꿔준다.
      * 만약 Room의 모든 인원이 Sleep이라면 Room의 상태 또한 Sleep으로 변경한다.
-     * @param userId
-     * @param sleepReason
+     * 부재시간은 이용종료시간을 넘어서 설정할 수 없다.
+     * @param sleepRequestDto
      */
     @Override
-    public void toSleepStatus(Long userId, SleepReason sleepReason) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+    public SleepInfoResponseDto toSleepStatus(Long id,SleepRequestDto sleepRequestDto) {
+        User user = userRepository.findById(id).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
 
         if(participation.getRemainSleepNum()>0){
-            room.setSleepNum(room.getSleepNum() + 1);
-            if(room.getSleepNum() == 0)
-                room.setStatus(Status.SLEEP);
-            participation.setSleep(new Sleep(new Date(),sleepReason));
+            if(participation.getSleep() == null){
+                if(DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime()))
+                {
+                    room.setSleepNum(room.getSleepNum() + 1);
+                    if(room.getSleepNum() == 0)
+                        room.setStatus(Status.SLEEP);
+                    participation.setSleep(new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason()));
+
+                    return new SleepInfoResponseDto(participation);
+                }else
+                    throw new SleepTimeCannotExceedFinishTimeException();
+            }else
+                throw new AlreadySleepStatusException();
         }else
             throw new SleepRequestDenyException();
     }
@@ -144,10 +156,11 @@ public class ParticipationServiceImpl implements ParticipationService{
      * @param extendTimeRequestDto
      */
     @Override
-    public void extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
-        User user = userRepository.findById(extendTimeRequestDto.getUserId()).orElseThrow(UserNotExistException::new);
+    public Date extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
 
         participation.setFinishTime(DateUtil.plusTime(participation.getFinishTime(),extendTimeRequestDto.getHour(),extendTimeRequestDto.getMinute()));
+        return participation.getFinishTime();
     }
 }
