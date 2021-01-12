@@ -1,7 +1,7 @@
 package com.room.manage.user.service;
 
-import com.room.manage.patricipation.model.dto.ParticipationInfoDto;
+import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
 
 public interface UserService {
-    ParticipationInfoDto findMyParticipation(Long userId);
+    ParticipationResponseDto findMyParticipation(Long userId);
 }

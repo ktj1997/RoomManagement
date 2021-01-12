@@ -1,20 +1,26 @@
 package com.room.manage.patricipation.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Getter
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
 public class Sleep {
     /**
-     * 부재 기간
+     * 부재 시작시간
      */
-    Date sleepTime;
+    Date sleepStartTime;
 
+    /**
+     * 부재 종료시간
+     */
+    Date sleepFinishTime;
     /**
      * 부재 이유
      */

@@ -1,4 +1,4 @@
-package com.room.manage.patricipation.model.dto;
+package com.room.manage.patricipation.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ExtendTimeRequestDto {
-    Long userId;
     int hour;
     int minute;
 }

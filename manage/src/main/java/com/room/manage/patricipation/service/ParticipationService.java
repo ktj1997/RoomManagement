@@ -1,13 +1,16 @@
 package com.room.manage.patricipation.service;
 
-import com.room.manage.patricipation.model.dto.ExtendTimeRequestDto;
-import com.room.manage.patricipation.model.dto.ParticipationRequestDto;
-import com.room.manage.patricipation.model.entity.SleepReason;
-import com.room.manage.room.model.entity.RoomType;
+import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
+import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.patricipation.model.dto.response.SleepInfoResponseDto;
+import com.room.manage.patricipation.model.dto.request.SleepRequestDto;
+
+import java.util.Date;
 
 public interface ParticipationService {
-    void joinRoom(ParticipationRequestDto participationRequestDto);
+    ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto);
     void exitRoom(Long userId);
-    void toSleepStatus(Long userId, SleepReason sleepReason);
-    void extendTime(ExtendTimeRequestDto extendTimeRequestDto);
+    SleepInfoResponseDto toSleepStatus(Long id,SleepRequestDto sleepRequestDto);
+    Date extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto);
 }
