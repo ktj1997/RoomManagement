@@ -45,8 +45,11 @@ public class ParticipationServiceImpl implements ParticipationService{
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
 
-        if(DateUtil.formatToDate(participationRequestDto.getFinishTime()).before(new Date()))
-            throw new PastTimeException();
+        if(!DateUtil.checkValidDate(participationRequestDto.getFinishTime()))
+            throw new InvalidTimeRequestException();
+
+        if(participationRepository.existsByParticipant(user))
+            throw new AlreadyParticipateException();
 
         if(room.getType() == RoomType.GROUP){
             if(room.canJoin())
@@ -82,7 +85,11 @@ public class ParticipationServiceImpl implements ParticipationService{
             }
             else
                 throw new AlreadyMaximumParticipantException();
-        } else{
+        }
+        /**
+         * 개인방 일 때
+         */
+        else{
             if(room.canJoin()){
                 List<Participation> otherParticipates = participationRepository
                         .findAllByRoom_FloorAndRoom_Floor(participationRequestDto.getFloor(),participationRequestDto.getField());
