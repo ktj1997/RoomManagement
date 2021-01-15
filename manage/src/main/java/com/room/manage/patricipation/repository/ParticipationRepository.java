@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ParticipationRepository extends JpaRepository<Participation,Long> {
     Optional<Participation> findByParticipant(User user);
     List<Participation> findAllByRoom_FloorAndRoom_Floor(String floor,String field);
+    boolean existsByParticipant(User user);
 }
