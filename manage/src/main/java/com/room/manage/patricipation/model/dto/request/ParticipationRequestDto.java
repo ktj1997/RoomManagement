@@ -10,6 +10,8 @@ public class ParticipationRequestDto{
     Long userId;
     String floor;
     String field;
-    int hour;
-    int minute;
+    /**
+     * 분은 30분단위 (ex: hour:0~24, minute:0 or 30)
+     */
+    String finishTime;
 }

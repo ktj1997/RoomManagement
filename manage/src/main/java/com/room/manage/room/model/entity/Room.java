@@ -83,4 +83,12 @@ public class Room {
     {
         return this.nowNum+1 <= this.maxNum;
     }
+
+    public void init()
+    {
+        this.status = Status.EMPTY;
+        this.nowNum = 0;
+        this.sleepNum = 0;
+        this.delegate = null;
+    }
 }

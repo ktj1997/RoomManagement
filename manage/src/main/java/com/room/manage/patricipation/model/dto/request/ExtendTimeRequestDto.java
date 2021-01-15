@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ExtendTimeRequestDto {
-    int hour;
-    int minute;
+    /**
+     * 분은 30분단위 (ex: hour:0~24, minute:0 or 30)
+     */
+    String finishTime;
 }

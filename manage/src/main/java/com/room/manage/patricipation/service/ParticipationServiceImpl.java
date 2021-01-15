@@ -1,9 +1,6 @@
 package com.room.manage.patricipation.service;
 
-import com.room.manage.patricipation.exception.AlreadySleepStatusException;
-import com.room.manage.patricipation.exception.NoSuchParticipationException;
-import com.room.manage.patricipation.exception.SleepRequestDenyException;
-import com.room.manage.patricipation.exception.SleepTimeCannotExceedFinishTimeException;
+import com.room.manage.patricipation.exception.*;
 import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
@@ -24,6 +21,7 @@ import com.room.manage.user.model.entity.User;
 import com.room.manage.user.repository.UserRepository;
 import com.room.manage.util.DateUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +44,10 @@ public class ParticipationServiceImpl implements ParticipationService{
         User user = userRepository.findById(participationRequestDto.getUserId())
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
+
+        if(DateUtil.formatToDate(participationRequestDto.getFinishTime()).before(new Date()))
+            throw new PastTimeException();
+
         if(room.getType() == RoomType.GROUP){
             if(room.canJoin())
             {
@@ -53,7 +55,7 @@ public class ParticipationServiceImpl implements ParticipationService{
                     room.setDelegate(user);
                     participation = Participation.builder()
                             .user(user)
-                            .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
+                            .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
                             .type(ParticipationType.ACTIVE)
                             .room(room).build();
                     participationRepository.save(participation);
@@ -68,7 +70,7 @@ public class ParticipationServiceImpl implements ParticipationService{
                     if(true){
                         participation = Participation.builder()
                                 .user(user)
-                                .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
+                                .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
                                 .type(ParticipationType.ACTIVE)
                                 .room(room).build();
                         participationRepository.save(participation);
@@ -87,7 +89,7 @@ public class ParticipationServiceImpl implements ParticipationService{
 
                 participation = Participation.builder()
                         .user(user)
-                        .finishTime(DateUtil.plusTime(participationRequestDto.getHour(),participationRequestDto.getMinute()))
+                        .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
                         .type(ParticipationType.ACTIVE)
                         .room(room).build();
                 participationRepository.save(participation);
@@ -160,7 +162,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
 
-        participation.setFinishTime(DateUtil.plusTime(participation.getFinishTime(),extendTimeRequestDto.getHour(),extendTimeRequestDto.getMinute()));
+        participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
         return participation.getFinishTime();
     }
 }
