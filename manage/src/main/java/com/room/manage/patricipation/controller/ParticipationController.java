@@ -2,10 +2,12 @@ package com.room.manage.patricipation.controller;
 
 import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.patricipation.model.dto.response.SleepInfoResponseDto;
 import com.room.manage.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.patricipation.service.ParticipationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -22,9 +24,9 @@ public class ParticipationController {
      * @param participationRequestDto 참여에 필요한 정보
      */
     @PostMapping
-    public void makeParticipation(@RequestBody ParticipationRequestDto participationRequestDto)
+    public ParticipationResponseDto makeParticipation(@RequestBody ParticipationRequestDto participationRequestDto)
     {
-        participationService.joinRoom(participationRequestDto);
+        return participationService.joinRoom(participationRequestDto);
     }
 
     /**

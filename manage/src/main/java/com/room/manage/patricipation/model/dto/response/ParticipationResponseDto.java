@@ -15,10 +15,6 @@ import java.util.Date;
 @ToString
 public class ParticipationResponseDto {
     /**
-     * 참여하는 Room의 식별자
-     */
-    private Long roomId;
-    /**
      * 참여하는 Room의 층
      */
     private String floor;

@@ -1,5 +1,7 @@
 package com.room.manage.patricipation.service;
 
+import com.room.manage.notice.Notice;
+import com.room.manage.notice.NoticeService;
 import com.room.manage.patricipation.exception.*;
 import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
@@ -36,6 +38,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final ParticipationRepository participationRepository;
+    private final NoticeService noticeService;
 
     @Override
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto) {
@@ -51,65 +54,20 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(participationRepository.existsByParticipant(user))
             throw new AlreadyParticipateException();
 
-        if(room.getType() == RoomType.GROUP){
-            if(room.canJoin())
-            {
-                if(room.getStatus() == Status.EMPTY){
-                    room.setDelegate(user);
-                    participation = Participation.builder()
-                            .user(user)
-                            .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
-                            .type(ParticipationType.ACTIVE)
-                            .room(room).build();
-                    participationRepository.save(participation);
-                    room.join();
-                }else{
-                    /**
-                     * 참가요청 만들기 --> 성공시 들여보내고, 아니면 거부
-                     * SSE공부하자
-                     */
-                    System.out.format("%s 님 %s 님이 참여요청 중입니다. 승낙 하시겠습니까? (Y/N)"
-                            ,room.getDelegate().getName(),user.getName());
-                    if(true){
-                        participation = Participation.builder()
-                                .user(user)
-                                .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
-                                .type(ParticipationType.ACTIVE)
-                                .room(room).build();
-                        participationRepository.save(participation);
-                        room.join();
-                    }else{
-
-                    }
-                }
-            }
-            else
+        if(room.canJoin())
+        {
+            if(room.getStatus().equals(RoomType.GROUP) && room.getStatus().equals(Status.EMPTY))
+                room.setDelegate(user);
+            participation = Participation.builder()
+                    .user(user)
+                    .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
+                    .type(ParticipationType.ACTIVE)
+                    .room(room).build();
+            participationRepository.save(participation);
+            noticeService.noticeOthers(room.getFloor(), room.getField(),user.getUserName());
+            room.join();
+        }else
                 throw new AlreadyMaximumParticipantException();
-        }
-        /**
-         * 개인방 일 때
-         */
-        else{
-            if(room.canJoin()){
-                List<Participation> otherParticipates = participationRepository
-                        .findAllByRoom_FloorAndRoom_Floor(participationRequestDto.getFloor(),participationRequestDto.getField());
-
-                participation = Participation.builder()
-                        .user(user)
-                        .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
-                        .type(ParticipationType.ACTIVE)
-                        .room(room).build();
-                participationRepository.save(participation);
-                room.join();
-                /**
-                 *  개인방의 모든 인원들에게 알림 보내기.
-                 *  SSE 공부하자
-                 */
-                otherParticipates.stream().forEach((it) -> System.out.format("%s 님! %s 님이 참여할 예정입니다. 자리를 정돈해주세요!",
-                        it.getParticipant().getName(),user.getName()));
-            }else
-                throw new AlreadyMaximumParticipantException();
-        }
         return new ParticipationResponseDto(participation);
     }
 
@@ -124,10 +82,9 @@ public class ParticipationServiceImpl implements ParticipationService{
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
 
-
         room.exit();
+        noticeService.deleteEmitter(room.getFloor(),room.getField(),user.getId());
         participationRepository.delete(participation);
-
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.room.manage.task;
 
+import com.room.manage.notice.NoticeService;
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.repository.ParticipationRepository;
 import com.room.manage.room.model.entity.Room;
@@ -21,6 +22,7 @@ public class ScheduledTask {
 
     private final ParticipationRepository participationRepository;
     private final RoomRepository roomRepository;
+    private final NoticeService noticeService;
 
     /**
      * 매일 오전 8시부터 밤 10시 30분 까지 30분 간격으로 체크
@@ -38,6 +40,7 @@ public class ScheduledTask {
                 else
                     it.getRoom().exit();
                 participationRepository.delete(it);
+                noticeService.deleteEmitter(it.getRoom().getFloor(),it.getRoom().getField(),it.getParticipant().getId());
             }
         });
     }
@@ -57,6 +60,7 @@ public class ScheduledTask {
          * Room의 모든 상태 초기화
          */
         rooms.stream().forEach(it -> it.init());
+        noticeService.init();
     }
 
 }
