@@ -42,19 +42,8 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Status status = Status.EMPTY;
 
-    @Column(length = 10)
-    @Enumerated(EnumType.STRING)
-    private RoomType type;
-
     @OneToMany(mappedBy = "room")
     List<Participation> participates = new ArrayList<>();
-
-    /**
-     * 대표자 (개인 방은 null, 그룹 방은 필수)
-     */
-    @Setter
-    @OneToOne
-    User delegate = null;
 
     /**
      * 퇴실
@@ -89,6 +78,5 @@ public class Room {
         this.status = Status.EMPTY;
         this.nowNum = 0;
         this.sleepNum = 0;
-        this.delegate = null;
     }
 }

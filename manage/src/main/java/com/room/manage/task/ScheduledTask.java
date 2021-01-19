@@ -1,10 +1,10 @@
 package com.room.manage.task;
 
-import com.room.manage.notice.NoticeService;
+import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.repository.ParticipationRepository;
+import com.room.manage.patricipation.service.ParticipationService;
 import com.room.manage.room.model.entity.Room;
-import com.room.manage.room.model.entity.RoomType;
 import com.room.manage.room.repository.RoomRepository;
 import com.room.manage.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ import java.util.List;
 public class ScheduledTask {
 
     private final ParticipationRepository participationRepository;
+    private final ParticipationService participationService;
     private final RoomRepository roomRepository;
-    private final NoticeService noticeService;
 
     /**
      * 매일 오전 8시부터 밤 10시 30분 까지 30분 간격으로 체크
@@ -33,14 +33,8 @@ public class ScheduledTask {
         List<Participation> participates = participationRepository.findAll();
 
         participates.stream().forEach(it ->{
-            if(DateUtil.formatToString(it.getFinishTime()).equals(DateUtil.formatToString(new Date())))
-            {
-                if(it.getRoom().getType().equals(RoomType.GROUP))
-                    it.getRoom().init();
-                else
-                    it.getRoom().exit();
-                participationRepository.delete(it);
-                noticeService.deleteEmitter(it.getRoom().getFloor(),it.getRoom().getField(),it.getParticipant().getId());
+            if(DateUtil.formatToString(it.getFinishTime()).equals(DateUtil.formatToString(new Date()))) {
+                participationService.exitRoom(it.getParticipant().getId());
             }
         });
     }
@@ -52,15 +46,15 @@ public class ScheduledTask {
     public void initAllRoom()
     {
         List<Room> rooms = roomRepository.findAll();
+        List<Participation> participates = participationRepository.findAll();
         /**
          * 모두 퇴실
          */
-        participationRepository.deleteAll();
         /**
          * Room의 모든 상태 초기화
          */
+        participates.stream().forEach(it -> participationService.exitRoom(it.getParticipant().getId()));
         rooms.stream().forEach(it -> it.init());
-        noticeService.init();
     }
 
 }

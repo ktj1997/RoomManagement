@@ -33,8 +33,9 @@ public class DateUtil {
     public static boolean checkValidDate(String date){
         String[] token = date.split("-");
         int length = token.length;
-        Date targetTime = null,startTime=null,finishTime=null,now=new Date();
+        Date fullDateTime=null,targetTime = null,startTime=null,finishTime=null,now=new Date();
         try {
+            fullDateTime = fullDateFormat.parse(date);
             targetTime = hourAndMinuteFormat.parse(token[length-1]);
             startTime = hourAndMinuteFormat.parse(StartTime);
             finishTime = hourAndMinuteFormat.parse(FinishTime);
@@ -44,7 +45,8 @@ public class DateUtil {
         }
             if(targetTime.before(startTime)
                     || targetTime.after(finishTime)
-                    || targetTime.before(now))
+                    || targetTime.before(now)
+                    || fullDateTime.before(new Date()))
                 return false;
         return true;
     }

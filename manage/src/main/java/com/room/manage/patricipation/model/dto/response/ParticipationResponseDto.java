@@ -15,6 +15,14 @@ import java.util.Date;
 @ToString
 public class ParticipationResponseDto {
     /**
+     * 유저 식별자
+     */
+    Long userId;
+    /**
+     * 유저 이름
+     */
+    String name;
+    /**
      * 참여하는 Room의 층
      */
     private String floor;
@@ -47,6 +55,8 @@ public class ParticipationResponseDto {
     private Sleep sleep;
 
     public ParticipationResponseDto(Participation participation){
+        this.userId = participation.getParticipant().getId();
+        this.name = participation.getParticipant().getName();
         this.floor = participation.getRoom().getFloor();
         this.field = participation.getRoom().getField();
         this.startTime = DateUtil.formatToString(participation.getStartTime());

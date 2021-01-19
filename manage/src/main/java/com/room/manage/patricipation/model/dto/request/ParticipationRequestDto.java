@@ -1,6 +1,5 @@
 package com.room.manage.patricipation.model.dto.request;
 
-import com.room.manage.room.model.entity.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

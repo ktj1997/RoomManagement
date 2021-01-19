@@ -29,6 +29,12 @@ public class ParticipationController {
         return participationService.joinRoom(participationRequestDto);
     }
 
+    @DeleteMapping
+    public void cancelParticipate(@RequestParam Long userId)
+    {
+        participationService.exitRoom(userId);
+    }
+
     /**
      * 이미 참여하고 있을 때, 시간 연장
      * @param extendTimeRequestDto

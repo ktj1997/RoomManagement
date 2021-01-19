@@ -1,7 +1,5 @@
 package com.room.manage.patricipation.service;
 
-import com.room.manage.notice.Notice;
-import com.room.manage.notice.NoticeService;
 import com.room.manage.patricipation.exception.*;
 import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
@@ -15,7 +13,6 @@ import com.room.manage.patricipation.repository.ParticipationRepository;
 import com.room.manage.room.exception.AlreadyMaximumParticipantException;
 import com.room.manage.room.exception.RoomNotExistException;
 import com.room.manage.room.model.entity.Room;
-import com.room.manage.room.model.entity.RoomType;
 import com.room.manage.room.model.entity.Status;
 import com.room.manage.room.repository.RoomRepository;
 import com.room.manage.user.exception.UserNotExistException;
@@ -23,12 +20,19 @@ import com.room.manage.user.model.entity.User;
 import com.room.manage.user.repository.UserRepository;
 import com.room.manage.util.DateUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Date;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +42,10 @@ public class ParticipationServiceImpl implements ParticipationService{
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final ParticipationRepository participationRepository;
-    private final NoticeService noticeService;
+    private final RestTemplate restTemplate;
+
+    @Value("${application.socket.url}")
+    String socketURL;
 
     @Override
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto) {
@@ -51,23 +58,20 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(!DateUtil.checkValidDate(participationRequestDto.getFinishTime()))
             throw new InvalidTimeRequestException();
 
-        if(participationRepository.existsByParticipant(user))
+        else if(participationRepository.existsByParticipant(user))
             throw new AlreadyParticipateException();
 
-        if(room.canJoin())
-        {
-            if(room.getStatus().equals(RoomType.GROUP) && room.getStatus().equals(Status.EMPTY))
-                room.setDelegate(user);
+        else if(!room.canJoin())
+            throw new AlreadyMaximumParticipantException();
+        else {
             participation = Participation.builder()
                     .user(user)
                     .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
                     .type(ParticipationType.ACTIVE)
                     .room(room).build();
             participationRepository.save(participation);
-            noticeService.noticeOthers(room.getFloor(), room.getField(),user.getUserName());
             room.join();
-        }else
-                throw new AlreadyMaximumParticipantException();
+        }
         return new ParticipationResponseDto(participation);
     }
 
@@ -81,10 +85,21 @@ public class ParticipationServiceImpl implements ParticipationService{
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
-
-        room.exit();
-        noticeService.deleteEmitter(room.getFloor(),room.getField(),user.getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, String> params = new LinkedHashMap<>();
         participationRepository.delete(participation);
+        room.exit();
+
+        params.put("userId",user.getId().toString());
+        params.put("userName",user.getName());
+        params.put("floor",room.getFloor());
+        params.put("field",room.getField());
+
+
+
+        if(restTemplate.exchange(socketURL, HttpMethod.DELETE,new HttpEntity(params,headers),boolean.class).getStatusCode() != HttpStatus.OK)
+            throw new ConnectionClosedException();
     }
 
     /**
@@ -129,4 +144,5 @@ public class ParticipationServiceImpl implements ParticipationService{
         participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
         return participation.getFinishTime();
     }
+
 }
