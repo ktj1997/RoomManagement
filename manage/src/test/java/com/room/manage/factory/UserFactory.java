@@ -1,6 +1,6 @@
 package com.room.manage.factory;
 
-import com.room.manage.auth.model.dto.SignUpRequestDto;
+import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import org.springframework.stereotype.Component;
 
 @Component
