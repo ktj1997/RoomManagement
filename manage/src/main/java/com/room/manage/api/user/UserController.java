@@ -18,8 +18,8 @@ public class UserController {
 
         @ApiOperation("내가 참여중인 스터디룸")
         @GetMapping("/participate")
-        public ParticipationResponseDto getParticipation(@RequestParam Long userId)
+        public ParticipationResponseDto getParticipation()
         {
-            return userService.findMyParticipation(userId);
+            return userService.findMyParticipation();
     }
 }

@@ -10,6 +10,6 @@ import java.util.Date;
 public interface ParticipationService {
     ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto);
     void exitRoom(Long userId);
-    ParticipationResponseDto toSleepStatus(Long id,SleepRequestDto sleepRequestDto);
-    Date extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto);
+    ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto);
+    Date extendTime(ExtendTimeRequestDto extendTimeRequestDto);
 }

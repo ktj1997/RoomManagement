@@ -60,7 +60,7 @@ public class ParticipationResponseDto {
      * 부재 정보
      */
     @ApiModelProperty("부재 정보")
-    private Sleep sleep;
+    private SleepDto sleep;
 
     public ParticipationResponseDto(Participation participation){
         this.userId = participation.getParticipant().getId();
@@ -71,7 +71,7 @@ public class ParticipationResponseDto {
         this.finishTime = DateUtil.formatToString(participation.getFinishTime());
         this.remainSleepNum = participation.getRemainSleepNum();
         this.participationType = participation.getParticipationType();
-        this.sleep = participation.getSleep();
+        this.sleep = participation.getSleep() == null ? null:new SleepDto(participation.getSleep());
     }
 
 }

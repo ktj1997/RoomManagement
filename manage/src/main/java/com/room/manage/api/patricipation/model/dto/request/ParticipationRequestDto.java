@@ -9,7 +9,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ParticipationRequestDto{
-    Long userId;
     @ApiModelProperty("층 (3,4,5)")
     String floor;
     @ApiModelProperty("호수 (A,B,C)")

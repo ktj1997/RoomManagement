@@ -31,9 +31,9 @@ public class ParticipationController {
 
     @ApiOperation("퇴실")
     @DeleteMapping
-    public void cancelParticipate(@RequestParam Long userId)
+    public void cancelParticipate()
     {
-        participationService.exitRoom(userId);
+        participationService.exitRoom(null);
     }
 
     /**
@@ -42,9 +42,9 @@ public class ParticipationController {
      */
     @ApiOperation("시간 연장")
     @PostMapping("/extend")
-    public Date extendParticipation(@RequestParam Long userId,@RequestBody ExtendTimeRequestDto extendTimeRequestDto)
+    public Date extendParticipation(@RequestBody ExtendTimeRequestDto extendTimeRequestDto)
     {
-        return participationService.extendTime(userId,extendTimeRequestDto);
+        return participationService.extendTime(extendTimeRequestDto);
     }
 
     /**
@@ -54,8 +54,8 @@ public class ParticipationController {
      */
     @ApiOperation("부재 신청")
     @PostMapping("/sleep")
-    public ParticipationResponseDto toSleepStatus(@RequestParam Long userId,@RequestBody SleepRequestDto sleepRequestDto)
+    public ParticipationResponseDto toSleepStatus(@RequestBody SleepRequestDto sleepRequestDto)
     {
-        return participationService.toSleepStatus(userId,sleepRequestDto);
+        return participationService.toSleepStatus(sleepRequestDto);
     }
 }

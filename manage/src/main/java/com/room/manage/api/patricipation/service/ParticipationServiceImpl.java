@@ -20,6 +20,7 @@ import com.room.manage.core.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -44,7 +45,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto) {
         Room room = roomRepository.findByFloorAndField(participationRequestDto.getFloor(), participationRequestDto.getField())
                 .orElseThrow(RoomNotExistException::new);
-        User user = userRepository.findById(participationRequestDto.getUserId())
+        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName()))
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
 
@@ -70,11 +71,11 @@ public class ParticipationServiceImpl implements ParticipationService{
 
     /**
      * 퇴실
-     *
-     * @param userId
      */
     @Override
     public void exitRoom(Long userId) {
+        if(userId == null)
+            userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
@@ -102,8 +103,8 @@ public class ParticipationServiceImpl implements ParticipationService{
      * @param sleepRequestDto
      */
     @Override
-    public ParticipationResponseDto toSleepStatus(Long id,SleepRequestDto sleepRequestDto) {
-        User user = userRepository.findById(id).orElseThrow(UserNotExistException::new);
+    public ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto) {
+        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
 
@@ -128,8 +129,8 @@ public class ParticipationServiceImpl implements ParticipationService{
      * @param extendTimeRequestDto
      */
     @Override
-    public Date extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+    public Date extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
+        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
 
         participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
