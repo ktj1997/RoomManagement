@@ -2,6 +2,8 @@ package com.room.manage.room.model.entity;
 
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.user.model.entity.User;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,14 +16,17 @@ import java.util.List;
 
 @Entity
 @Getter
+@ApiModel
 @NoArgsConstructor
 @IdClass(RoomId.class)
 public class Room {
 
+    @ApiModelProperty("층")
     @Id
     @Column(length = 2)
     private String floor;
 
+    @ApiModelProperty("호수")
     @Id
     @Column(length = 2)
     private String field;
@@ -29,14 +34,17 @@ public class Room {
     @Column(nullable = false,length = 2)
     private int maxNum;
 
+    @ApiModelProperty("휴재 중인 인원수")
     @Setter
     @Column(nullable = false,length = 2)
     private int sleepNum=0;
 
+    @ApiModelProperty("현재 참여하고있는 인원 수")
     @Setter
     @Column(nullable = false,length = 2)
     private int nowNum=0;
 
+    @ApiModelProperty("현재 상태")
     @Setter
     @Column(length = 10)
     @Enumerated(EnumType.STRING)

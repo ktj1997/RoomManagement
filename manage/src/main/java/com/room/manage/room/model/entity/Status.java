@@ -1,5 +1,12 @@
 package com.room.manage.room.model.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel
 public enum Status {
-    SLEEP,ACTIVATE,EMPTY
+    @ApiModelProperty("참여 중")
+    ACTIVATE,
+    @ApiModelProperty("이용자 없음")
+    EMPTY
 }

@@ -2,6 +2,7 @@ package com.room.manage.auth;
 
 import com.room.manage.auth.model.dto.SignUpRequestDto;
 import com.room.manage.auth.service.AuthService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @ApiOperation("회원가입")
     @PostMapping("/signup")
     public void signUp(@RequestBody SignUpRequestDto signUpRequestDto)
     {

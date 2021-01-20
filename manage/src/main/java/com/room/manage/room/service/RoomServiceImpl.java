@@ -5,6 +5,7 @@ import com.room.manage.patricipation.repository.ParticipationRepository;
 import com.room.manage.room.exception.RoomNotExistException;
 import com.room.manage.room.model.dto.RoomInfoDto;
 import com.room.manage.room.model.entity.Room;
+import com.room.manage.room.model.entity.RoomId;
 import com.room.manage.room.repository.RoomRepository;
 import com.room.manage.user.model.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,8 @@ public class RoomServiceImpl implements RoomService{
      */
     @Override
     public RoomInfoDto getRoomInfo(String floor,String field) {
-        Room room = roomRepository.findByFloorAndField(floor,field).orElseThrow(RoomNotExistException::new);
+        RoomId roomId = new RoomId(floor,field);
+        Room room = roomRepository.findById(roomId).orElseThrow(RoomNotExistException::new);
         return new RoomInfoDto(room);
     }
 }

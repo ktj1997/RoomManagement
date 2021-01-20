@@ -4,7 +4,6 @@ import com.room.manage.patricipation.exception.*;
 import com.room.manage.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.patricipation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.patricipation.model.dto.response.ParticipationResponseDto;
-import com.room.manage.patricipation.model.dto.response.SleepInfoResponseDto;
 import com.room.manage.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.patricipation.model.entity.Participation;
 import com.room.manage.patricipation.model.entity.ParticipationType;
@@ -13,7 +12,6 @@ import com.room.manage.patricipation.repository.ParticipationRepository;
 import com.room.manage.room.exception.AlreadyMaximumParticipantException;
 import com.room.manage.room.exception.RoomNotExistException;
 import com.room.manage.room.model.entity.Room;
-import com.room.manage.room.model.entity.Status;
 import com.room.manage.room.repository.RoomRepository;
 import com.room.manage.user.exception.UserNotExistException;
 import com.room.manage.user.model.entity.User;
@@ -21,15 +19,10 @@ import com.room.manage.user.repository.UserRepository;
 import com.room.manage.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -109,7 +102,7 @@ public class ParticipationServiceImpl implements ParticipationService{
      * @param sleepRequestDto
      */
     @Override
-    public SleepInfoResponseDto toSleepStatus(Long id,SleepRequestDto sleepRequestDto) {
+    public ParticipationResponseDto toSleepStatus(Long id,SleepRequestDto sleepRequestDto) {
         User user = userRepository.findById(id).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
@@ -119,11 +112,9 @@ public class ParticipationServiceImpl implements ParticipationService{
                 if(DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime()))
                 {
                     room.setSleepNum(room.getSleepNum() + 1);
-                    if(room.getSleepNum() == 0)
-                        room.setStatus(Status.SLEEP);
                     participation.setSleep(new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason()));
 
-                    return new SleepInfoResponseDto(participation);
+                    return new ParticipationResponseDto(participation);
                 }else
                     throw new SleepTimeCannotExceedFinishTimeException();
             }else
