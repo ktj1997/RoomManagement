@@ -7,6 +7,7 @@ import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.patricipation.service.ParticipationService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ public class ParticipationController {
     @DeleteMapping
     public void cancelParticipate()
     {
-        participationService.exitRoom(null);
+        participationService.exitRoom(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     /**

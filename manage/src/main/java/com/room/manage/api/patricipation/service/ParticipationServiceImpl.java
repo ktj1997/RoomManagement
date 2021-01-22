@@ -74,8 +74,6 @@ public class ParticipationServiceImpl implements ParticipationService{
      */
     @Override
     public void exitRoom(Long userId) {
-        if(userId == null)
-            userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
         Room room = participation.getRoom();
