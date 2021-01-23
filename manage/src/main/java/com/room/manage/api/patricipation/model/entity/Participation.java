@@ -33,6 +33,7 @@ public class Participation {
     /**
      * 현재 상태(부재,활동)
      */
+    @Setter
     @Enumerated(EnumType.STRING)
     ParticipationType participationType;
 
@@ -57,10 +58,8 @@ public class Participation {
     /**
      * 부재 정보
      */
-    @Setter
-    @Embedded
+    @OneToOne(mappedBy = "participation")
     Sleep sleep = null;
-
 
     @Builder
     public Participation(User user, Date finishTime,Room room,ParticipationType type)

@@ -1,4 +1,4 @@
-package com.room.manage.core.Exception;
+package com.room.manage.core.exception;
 
 
 import com.room.manage.api.auth.exception.DuplicateUserNameException;

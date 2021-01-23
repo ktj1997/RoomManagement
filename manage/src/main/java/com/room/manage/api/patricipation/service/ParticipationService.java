@@ -4,6 +4,7 @@ import com.room.manage.api.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
+import com.room.manage.api.patricipation.model.entity.Sleep;
 
 import java.util.Date;
 
@@ -12,4 +13,5 @@ public interface ParticipationService {
     void exitRoom(Long userId);
     ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto);
     Date extendTime(ExtendTimeRequestDto extendTimeRequestDto);
+    void toActiveStatus(Sleep sleep);
 }

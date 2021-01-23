@@ -1,4 +1,4 @@
-package com.room.manage.core.Exception;
+package com.room.manage.core.exception;
 
 import lombok.Getter;
 

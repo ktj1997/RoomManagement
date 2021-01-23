@@ -10,6 +10,7 @@ import com.room.manage.api.patricipation.model.entity.ParticipationType;
 import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
 import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
+import com.room.manage.api.patricipation.repository.SleepRepository;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.repository.RoomRepository;
@@ -36,6 +37,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final ParticipationRepository participationRepository;
+    private final SleepRepository sleepRepository;
     private final RestTemplate restTemplate;
 
     @Value("${application.socket.url}")
@@ -111,8 +113,8 @@ public class ParticipationServiceImpl implements ParticipationService{
                 if(DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime()))
                 {
                     room.setSleepNum(room.getSleepNum() + 1);
-                    participation.setSleep(new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason()));
-
+                    participation.setParticipationType(ParticipationType.SLEEP);
+                    sleepRepository.save(new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason(),participation));
                     return new ParticipationResponseDto(participation);
                 }else
                     throw new InvalidTimeRequestException();
@@ -120,6 +122,17 @@ public class ParticipationServiceImpl implements ParticipationService{
                 throw new AlreadySleepStatusException();
         }else
             throw new RemainSleepNumZeroException();
+    }
+
+    /**
+     * 부재 상태 --> 활동상태
+     */
+    @Override
+    public void toActiveStatus(Sleep sleep) {
+        Participation participation = sleep.getParticipation();
+        participation.setParticipationType(ParticipationType.ACTIVE);
+
+        sleepRepository.delete(sleep);
     }
 
     /**
@@ -134,5 +147,4 @@ public class ParticipationServiceImpl implements ParticipationService{
         participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
         return participation.getFinishTime();
     }
-
 }

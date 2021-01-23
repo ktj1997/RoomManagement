@@ -32,9 +32,11 @@ public class ScheduledTask {
         List<Participation> participates = participationRepository.findAll();
 
         participates.stream().forEach(it ->{
-            if(DateUtil.formatToString(it.getFinishTime()).equals(DateUtil.formatToString(new Date()))) {
+            Date date = new Date();
+            if(DateUtil.formatToString(it.getFinishTime()).equals(DateUtil.formatToString(date)))
                 participationService.exitRoom(it.getParticipant().getId());
-            }
+            if(DateUtil.formatToString(it.getSleep().getSleepFinishTime()).equals(DateUtil.formatToString(date)))
+                participationService.toActiveStatus(it.getSleep());
         });
     }
 

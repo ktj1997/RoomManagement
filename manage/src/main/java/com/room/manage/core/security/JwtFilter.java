@@ -1,18 +1,15 @@
 package com.room.manage.core.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room.manage.api.auth.exception.NotBearerTokenException;
-import com.room.manage.core.Exception.ExceptionCode;
-import com.room.manage.core.Exception.ExceptionResponse;
-import io.jsonwebtoken.Claims;
+import com.room.manage.core.exception.ExceptionCode;
+import com.room.manage.core.exception.ExceptionResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
