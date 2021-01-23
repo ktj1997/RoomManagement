@@ -1,10 +1,8 @@
 package com.room.manage.core.security;
 
+import com.room.manage.api.auth.exception.NotBearerTokenException;
 import com.room.manage.api.user.model.entity.UserRole;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.codec.DecodingException;
@@ -35,22 +33,19 @@ public class JwtProvider {
     @Value("${time.refreshToken.expire}")
     Long refreshTokenExpire;
 
-    public String getTokenFromHeader(HttpServletRequest request)
+    public String parsingToken(String token)
     {
-        String token = request.getHeader("Authorization");
-        if(token != null && token.startsWith("Bearer"))
-            token.replace("Bearer ","");
-        return token;
+        if(token.startsWith("Bearer "))
+            return token.replace("Bearer ","");
+        else
+           throw new NotBearerTokenException();
     }
 
-    public boolean validateToken(String token)
-    {
-        try{
-            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return claims.getBody().getExpiration().after(new Date());
-        }catch (Exception e){
-             return false;
-        }
+
+    public boolean validateToken(String token){
+        Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(parsingToken(token));
+        return claims.getBody().getExpiration().after(new Date());
+
     }
     public String generateAccessToken(Long userId, UserRole role) {
         Date expire = new Date(new Date().getTime() + accessTokenExpire);
