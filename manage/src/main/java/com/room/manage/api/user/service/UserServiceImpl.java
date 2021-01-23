@@ -1,6 +1,6 @@
 package com.room.manage.api.user.service;
 
-import com.room.manage.api.patricipation.exception.NoSuchParticipationException;
+import com.room.manage.api.patricipation.exception.NoParticipationException;
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.entity.Participation;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ParticipationResponseDto findMyParticipation() {
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
-        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
+        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
         return new ParticipationResponseDto(participation);
     }

@@ -2,7 +2,7 @@ package com.room.manage.api.user;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.service.AuthService;
 import com.room.manage.factory.CommonFactory;
-import com.room.manage.api.patricipation.exception.NoSuchParticipationException;
+import com.room.manage.api.patricipation.exception.NoParticipationException;
 import com.room.manage.api.patricipation.service.ParticipationService;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.service.UserService;
@@ -43,7 +43,7 @@ public class UserServiceTest{
     public void findParticipationTest()
     {
         Assertions.assertAll(
-                () -> Assertions.assertThrows(NoSuchParticipationException.class,() ->userService.findMyParticipation(user.getId()) ),
+                () -> Assertions.assertThrows(NoParticipationException.class,() ->userService.findMyParticipation(user.getId()) ),
                 () -> Assertions.assertDoesNotThrow(() -> participationService.joinRoom(commonFactory.participationFactory.getParticipationRequestDto())),
                 () -> Assertions.assertDoesNotThrow(() -> userService.findMyParticipation(user.getId()))
         );

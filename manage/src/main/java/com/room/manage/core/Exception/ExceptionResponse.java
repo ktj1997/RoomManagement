@@ -14,10 +14,10 @@ public class ExceptionResponse {
     int httpStatus;
     Date timeStamp = new Date();
 
-    public ExceptionResponse(Exception e, HttpStatus status,String code)
+    public ExceptionResponse(HttpStatus status,ExceptionCode code)
     {
-        this.message = e.getMessage();
-        this.code = code;
+        this.message = code.getMessage();
+        this.code = code.getCode();
         this.httpStatus = status.value();
     }
 }

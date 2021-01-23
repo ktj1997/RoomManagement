@@ -38,7 +38,7 @@ public class JwtProvider {
     public String getTokenFromHeader(HttpServletRequest request)
     {
         String token = request.getHeader("Authorization");
-        if(token != null && token.contains("Bearer"))
+        if(token != null && token.startsWith("Bearer"))
             token.replace("Bearer ","");
         return token;
     }

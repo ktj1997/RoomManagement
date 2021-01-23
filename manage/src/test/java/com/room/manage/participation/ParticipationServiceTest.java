@@ -4,7 +4,7 @@ import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.service.AuthService;
 import com.room.manage.factory.CommonFactory;
 import com.room.manage.api.patricipation.exception.AlreadySleepStatusException;
-import com.room.manage.api.patricipation.exception.NoSuchParticipationException;
+import com.room.manage.api.patricipation.exception.NoParticipationException;
 import com.room.manage.api.patricipation.exception.SleepTimeCannotExceedFinishTimeException;
 import com.room.manage.api.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
@@ -71,7 +71,7 @@ public class ParticipationServiceTest {
 
         Assertions.assertNotNull(participationResponseDto);
         Assertions.assertDoesNotThrow(() -> participationService.exitRoom(user.getId()));
-        Assertions.assertThrows(NoSuchParticipationException.class,() -> userService.findMyParticipation(user.getId()));
+        Assertions.assertThrows(NoParticipationException.class,() -> userService.findMyParticipation(user.getId()));
     }
 
     @Test

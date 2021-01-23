@@ -9,7 +9,7 @@ import com.room.manage.api.patricipation.model.entity.Participation;
 import com.room.manage.api.patricipation.model.entity.ParticipationType;
 import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
-import com.room.manage.api.room.exception.AlreadyMaximumParticipantException;
+import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.repository.RoomRepository;
@@ -77,7 +77,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(userId == null)
             userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
-        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
+        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
         Room room = participation.getRoom();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -105,7 +105,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     public ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto) {
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
-        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
+        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
         Room room = participation.getRoom();
 
         if(participation.getRemainSleepNum()>0){
@@ -121,7 +121,7 @@ public class ParticipationServiceImpl implements ParticipationService{
             }else
                 throw new AlreadySleepStatusException();
         }else
-            throw new SleepRequestDenyException();
+            throw new RemainSleepNumZeroException();
     }
 
     /**
@@ -131,7 +131,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     public Date extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
-        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoSuchParticipationException::new);
+        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
         participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
         return participation.getFinishTime();
