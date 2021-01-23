@@ -117,7 +117,7 @@ public class ParticipationServiceImpl implements ParticipationService{
 
                     return new ParticipationResponseDto(participation);
                 }else
-                    throw new SleepTimeCannotExceedFinishTimeException();
+                    throw new InvalidTimeRequestException();
             }else
                 throw new AlreadySleepStatusException();
         }else
