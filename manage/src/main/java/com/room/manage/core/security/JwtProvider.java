@@ -83,6 +83,12 @@ public class JwtProvider {
     }
     public Authentication getAuthentication(String token)
     {
-        return new UsernamePasswordAuthenticationToken(getUserIdFromToken(token),"",List.of(getAuthorities(getClaimsFromToken(token))));
+        UsernamePasswordAuthenticationToken authentication = null;
+        if(token != null){
+            String parsingToken = parsingToken(token);
+            if(validateToken(token))
+               authentication =  new UsernamePasswordAuthenticationToken(getUserIdFromToken(parsingToken),"",List.of(getAuthorities(getClaimsFromToken(parsingToken))));
+        }
+        return authentication;
     }
 }
