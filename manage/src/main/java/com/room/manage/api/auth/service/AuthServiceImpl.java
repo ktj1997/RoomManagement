@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     @Transactional
-    public void signUp(SignUpRequestDto signUpRequestDto) {
+    public User signUp(SignUpRequestDto signUpRequestDto) {
 
         if(userRepository.existsByUserName(signUpRequestDto.getUserName()))
             throw new DuplicateUserNameException();
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService{
                 .name(signUpRequestDto.getName())
                 .userRole(UserRole.ROLE_USER)
                 .build();
-       userRepository.save(user);
+       return userRepository.save(user);
     }
 
     @Override
@@ -44,9 +44,6 @@ public class AuthServiceImpl implements AuthService{
 
         if(!passwordEncoder.matches(logInRequestDto.getPassword(),user.getPassword()))
             throw new WrongLoginInfoException();
-        return new LoginResponseDto(
-                jwtProvider.generateAccessToken(user.getId(),user.getUserRole()),
-                jwtProvider.generateRefreshToken(user.getId(),user.getUserRole())
-        );
+        return new LoginResponseDto(jwtProvider.generateAccessToken(user.getId(),user.getUserRole()));
     }
 }

@@ -1,7 +1,7 @@
 package com.room.manage.api.patricipation.model.dto.response;
 
 import com.room.manage.api.patricipation.model.entity.Participation;
-import com.room.manage.api.patricipation.model.entity.ParticipationType;
+import com.room.manage.api.patricipation.model.entity.ParticipationStatus;
 import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.core.util.DateUtil;
 import io.swagger.annotations.ApiModelProperty;
@@ -54,7 +54,7 @@ public class ParticipationResponseDto {
      * 현재 상태(부재,활동)
      */
     @ApiModelProperty("현재 참여 상태")
-    private ParticipationType participationType;
+    private ParticipationStatus participationStatus;
 
     /**
      * 부재 정보
@@ -70,8 +70,19 @@ public class ParticipationResponseDto {
         this.startTime = DateUtil.formatToString(participation.getStartTime());
         this.finishTime = DateUtil.formatToString(participation.getFinishTime());
         this.remainSleepNum = participation.getRemainSleepNum();
-        this.participationType = participation.getParticipationType();
+        this.participationStatus = participation.getParticipationStatus();
         this.sleep = participation.getSleep() == null ? null:new SleepDto(participation.getSleep());
+    }
+    public ParticipationResponseDto(Participation participation, Sleep sleep){
+        this.userId = participation.getParticipant().getId();
+        this.name = participation.getParticipant().getName();
+        this.floor = participation.getRoom().getFloor();
+        this.field = participation.getRoom().getField();
+        this.startTime = DateUtil.formatToString(participation.getStartTime());
+        this.finishTime = DateUtil.formatToString(participation.getFinishTime());
+        this.remainSleepNum = participation.getRemainSleepNum();
+        this.participationStatus = participation.getParticipationStatus();
+        this.sleep = new SleepDto(sleep);
     }
 
 }

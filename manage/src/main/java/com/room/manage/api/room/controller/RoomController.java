@@ -1,6 +1,7 @@
 package com.room.manage.api.room.controller;
 
-import com.room.manage.api.room.model.dto.RoomInfoDto;
+import com.room.manage.api.room.model.dto.DetailRoomInfoDto;
+import com.room.manage.api.room.model.dto.SimpleRoomInfoDto;
 import com.room.manage.api.room.service.RoomService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/room")
+@RequestMapping("/rooms")
 public class RoomController {
 
     private final RoomService roomService;
@@ -20,9 +23,16 @@ public class RoomController {
      * Room 관련 정보 가져오기
      */
     @ApiOperation("스터디룸 현재상황")
-    @GetMapping("/info")
-    public RoomInfoDto getRoomInfo(@RequestParam String floor, @RequestParam String field)
+    @GetMapping("/room")
+    public DetailRoomInfoDto getRoomInfo(@RequestParam String floor, @RequestParam String field)
     {
        return roomService.getRoomInfo(floor,field);
+    }
+
+    @ApiOperation("모든 스터디룸 상황")
+    @GetMapping()
+    public List<SimpleRoomInfoDto> getAllRoomInfo()
+    {
+        return roomService.getAllRoomInfo();
     }
 }

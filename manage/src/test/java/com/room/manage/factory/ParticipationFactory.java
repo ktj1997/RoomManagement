@@ -6,8 +6,13 @@ import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.patricipation.model.entity.SleepReason;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Component
 public class ParticipationFactory {
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Participation
@@ -15,8 +20,8 @@ public class ParticipationFactory {
     private Long userId = 1L;
     private String floor = "3";
     private String field = "B";
-    private int hour = 3;
-    private int minute = 0;
+    private String date = simpleDateFormat.format(new Date());
+    private String endTime = "20:30";
 
     /**
      * Sleep
@@ -27,22 +32,21 @@ public class ParticipationFactory {
     /**
      * Extend
      */
-    private int extendHour = 1;
-    private int extendMinute = 30;
+    private String extendTime = "21:30";
 
     public ParticipationRequestDto getParticipationRequestDto()
     {
-        return new ParticipationRequestDto(userId,floor,field,hour,minute);
+        return new ParticipationRequestDto(floor,field,date+"-"+endTime);
     }
 
     public ExtendTimeRequestDto getExtendTimeRequestDto()
     {
-        return new ExtendTimeRequestDto(extendHour,extendMinute);
+        return new ExtendTimeRequestDto(date+"-"+extendTime);
     }
 
     public SleepRequestDto getSleepRequestDto()
     {
-        return new SleepRequestDto(sleepFinishTime,reason);
+        return new SleepRequestDto(date+"-"+sleepFinishTime,reason);
     }
 
 }

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @ApiModel
 @Getter
 @AllArgsConstructor
-public class RoomInfoDto {
+public class DetailRoomInfoDto {
     /**
      * 층
      */
@@ -49,7 +49,7 @@ public class RoomInfoDto {
     @ApiModelProperty("참여자 목록")
     private List<UserInfoDto> participants;
 
-    public RoomInfoDto(Room room){
+    public DetailRoomInfoDto(Room room){
         this.floor = room.getFloor();
         this.field = room.getField();
         this.status = room.getStatus();

@@ -22,16 +22,10 @@ public class JwtProvider {
     @Value("${application.jwt.secret}")
     String jwtSecret;
     /**
-     * 하루
+     * 한달
      */
     @Value("${time.accessToken.expire}")
     Long accessTokenExpire;
-
-    /**
-     * 한달
-     */
-    @Value("${time.refreshToken.expire}")
-    Long refreshTokenExpire;
 
     public String parsingToken(String token)
     {
@@ -57,18 +51,6 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
-
-    public String generateRefreshToken(Long userId, UserRole role) {
-        Date expire = new Date(new Date().getTime() + refreshTokenExpire);
-        return Jwts.builder()
-                .claim("id",userId)
-                .claim("roles",role)
-                .setIssuedAt(new Date())
-                .setExpiration(expire)
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
-                .compact();
-    }
-
     public Long getUserIdFromToken(String token)
     {
         return getClaimsFromToken(token).get("id",Long.class);

@@ -11,11 +11,7 @@ public class LoginResponseDto {
 
     @ApiModelProperty("AccessToken")
     private String accessToken;
-    @ApiModelProperty("RefreshToken")
-    private String refreshToken;
-
-    public LoginResponseDto(String accessToken, String refreshToken){
+    public LoginResponseDto(String accessToken){
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
     }
 }

@@ -47,7 +47,7 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Status status = Status.EMPTY;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room",fetch = FetchType.EAGER)
     List<Participation> participates = new ArrayList<>();
 
     /**

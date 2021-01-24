@@ -34,6 +34,7 @@ public class Sleep {
      */
     @ApiModelProperty("부재 이유")
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
     private SleepReason reason;
 
     @Setter

@@ -35,7 +35,8 @@ public class Participation {
      */
     @Setter
     @Enumerated(EnumType.STRING)
-    ParticipationType participationType;
+    @Column(length = 10)
+    ParticipationStatus participationStatus;
 
     /**
      * 남은 부재 가능 횟수
@@ -58,15 +59,30 @@ public class Participation {
     /**
      * 부재 정보
      */
-    @OneToOne(mappedBy = "participation")
+    @OneToOne(mappedBy ="participation",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     Sleep sleep = null;
 
+    public void toSleepStatus(Sleep sleep)
+    {
+        this.sleep = sleep;
+        this.participationStatus = ParticipationStatus.SLEEP;
+        this.remainSleepNum--;
+    }
+
+    public void toActiveStatus()
+    {
+
+        this.sleep = null;
+        this.participationStatus = ParticipationStatus.ACTIVE;
+    }
+
     @Builder
-    public Participation(User user, Date finishTime,Room room,ParticipationType type)
+    public Participation(User user, Date finishTime, Room room, ParticipationStatus type,Sleep sleep)
     {
         this.participant = user;
         this.finishTime = finishTime;
         this.room = room;
-        this.participationType = type;
+        this.participationStatus = type;
+        this.sleep = sleep;
     }
 }

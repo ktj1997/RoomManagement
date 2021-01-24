@@ -35,7 +35,7 @@ public class ScheduledTask {
             Date date = new Date();
             if(DateUtil.formatToString(it.getFinishTime()).equals(DateUtil.formatToString(date)))
                 participationService.exitRoom(it.getParticipant().getId());
-            if(DateUtil.formatToString(it.getSleep().getSleepFinishTime()).equals(DateUtil.formatToString(date)))
+            if(it.getSleep() != null && DateUtil.formatToString(it.getSleep().getSleepFinishTime()).equals(DateUtil.formatToString(date)))
                 participationService.toActiveStatus(it.getSleep());
         });
     }

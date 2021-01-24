@@ -6,7 +6,7 @@ import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestD
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.patricipation.model.entity.Participation;
-import com.room.manage.api.patricipation.model.entity.ParticipationType;
+import com.room.manage.api.patricipation.model.entity.ParticipationStatus;
 import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
 import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
@@ -63,7 +63,7 @@ public class ParticipationServiceImpl implements ParticipationService{
             participation = Participation.builder()
                     .user(user)
                     .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
-                    .type(ParticipationType.ACTIVE)
+                    .type(ParticipationStatus.ACTIVE)
                     .room(room).build();
             participationRepository.save(participation);
             room.join();
@@ -75,6 +75,7 @@ public class ParticipationServiceImpl implements ParticipationService{
      * 퇴실
      */
     @Override
+    @Transactional(noRollbackFor = ConnectionClosedException.class)
     public void exitRoom(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
@@ -91,11 +92,12 @@ public class ParticipationServiceImpl implements ParticipationService{
         params.put("field",room.getField());
 
 
-
-        if(restTemplate.exchange(socketURL, HttpMethod.DELETE,new HttpEntity(params,headers),boolean.class).getStatusCode() != HttpStatus.OK)
+        try{
+            restTemplate.exchange(socketURL, HttpMethod.DELETE,new HttpEntity(params,headers),boolean.class);
+        }catch(Exception e){
             throw new ConnectionClosedException();
+        }
     }
-
     /**
      * Sleep 상태로 바꿔준다.
      * 만약 Room의 모든 인원이 Sleep이라면 Room의 상태 또한 Sleep으로 변경한다.
@@ -110,12 +112,12 @@ public class ParticipationServiceImpl implements ParticipationService{
 
         if(participation.getRemainSleepNum()>0){
             if(participation.getSleep() == null){
-                if(DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime()))
-                {
+                if(DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime())) {
+                    Sleep sleep = new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason(),participation);
                     room.setSleepNum(room.getSleepNum() + 1);
-                    participation.setParticipationType(ParticipationType.SLEEP);
-                    sleepRepository.save(new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason(),participation));
-                    return new ParticipationResponseDto(participation);
+                    participation.toSleepStatus(sleep);
+                    sleepRepository.save(sleep);
+                    return new ParticipationResponseDto(participation,sleep);
                 }else
                     throw new InvalidTimeRequestException();
             }else
@@ -130,8 +132,9 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     public void toActiveStatus(Sleep sleep) {
         Participation participation = sleep.getParticipation();
-        participation.setParticipationType(ParticipationType.ACTIVE);
-
+        Room room = participation.getRoom();
+        room.setNowNum(room.getNowNum()-1);
+        participation.toActiveStatus();
         sleepRepository.delete(sleep);
     }
 
