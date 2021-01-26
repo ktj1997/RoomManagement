@@ -11,6 +11,7 @@ import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
 import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
 import com.room.manage.api.patricipation.repository.SleepRepository;
+import com.room.manage.api.patricipation.service.function.SendAlarm;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.repository.RoomRepository;
@@ -19,15 +20,10 @@ import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.core.util.DateUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +34,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     private final RoomRepository roomRepository;
     private final ParticipationRepository participationRepository;
     private final SleepRepository sleepRepository;
-    private final RestTemplate restTemplate;
-
-    @Value("${application.socket.url}")
-    String socketURL;
+    private final SendAlarm sendAlarm;
 
     @Override
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto) {
@@ -77,23 +70,16 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     @Transactional(noRollbackFor = ConnectionClosedException.class)
     public void exitRoom(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
-        Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
-        Room room = participation.getRoom();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        Map<String, String> params = new LinkedHashMap<>();
-        participationRepository.delete(participation);
-        room.exit();
-
-        params.put("userId",user.getId().toString());
-        params.put("userName",user.getName());
-        params.put("floor",room.getFloor());
-        params.put("field",room.getField());
-
 
         try{
-            restTemplate.exchange(socketURL, HttpMethod.DELETE,new HttpEntity(params,headers),boolean.class);
+            User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+            Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
+            Room room = participation.getRoom();
+
+            participationRepository.delete(participation);
+            room.exit();
+
+            sendAlarm.send(user,room);
         }catch(Exception e){
             throw new ConnectionClosedException();
         }
@@ -130,12 +116,14 @@ public class ParticipationServiceImpl implements ParticipationService{
      * 부재 상태 --> 활동상태
      */
     @Override
-    public void toActiveStatus(Sleep sleep) {
+    public ParticipationResponseDto toActiveStatus(Sleep sleep) {
         Participation participation = sleep.getParticipation();
         Room room = participation.getRoom();
         room.setNowNum(room.getNowNum()-1);
         participation.toActiveStatus();
         sleepRepository.delete(sleep);
+
+        return new ParticipationResponseDto(participation);
     }
 
     /**

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -24,7 +25,6 @@ public class UserServiceImpl implements UserService {
      * @return 참여장보
      */
     @Override
-    @Transactional
     public ParticipationResponseDto findMyParticipation() {
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);

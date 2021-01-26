@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RoomService {
     DetailRoomInfoDto getRoomInfo(String field, String floor);
-    List<SimpleRoomInfoDto> getAllRoomInfo();
+    List<SimpleRoomInfoDto> getAllRoomsInfo();
 }

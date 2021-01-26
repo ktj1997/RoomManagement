@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
 
@@ -23,7 +24,6 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    @Transactional
     public User signUp(SignUpRequestDto signUpRequestDto) {
 
         if(userRepository.existsByUserName(signUpRequestDto.getUserName()))
@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public LoginResponseDto login(LogInRequestDto logInRequestDto) {
+    public LoginResponseDto signin(LogInRequestDto logInRequestDto) {
         User user = userRepository.findByUserName(logInRequestDto.getUserName()).orElseThrow(WrongLoginInfoException::new);
 
         if(!passwordEncoder.matches(logInRequestDto.getPassword(),user.getPassword()))

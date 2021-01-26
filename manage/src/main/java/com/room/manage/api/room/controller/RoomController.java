@@ -33,6 +33,6 @@ public class RoomController {
     @GetMapping()
     public List<SimpleRoomInfoDto> getAllRoomInfo()
     {
-        return roomService.getAllRoomInfo();
+        return roomService.getAllRoomsInfo();
     }
 }

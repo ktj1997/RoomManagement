@@ -25,14 +25,14 @@ public class ParticipationController {
      */
     @ApiOperation("입실")
     @PostMapping
-    public ParticipationResponseDto makeParticipation(@RequestBody ParticipationRequestDto participationRequestDto)
+    public ParticipationResponseDto joinRoom(@RequestBody ParticipationRequestDto participationRequestDto)
     {
         return participationService.joinRoom(participationRequestDto);
     }
 
     @ApiOperation("퇴실")
     @DeleteMapping
-    public void cancelParticipate()
+    public void exitRoom()
     {
         participationService.exitRoom(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName()));
     }

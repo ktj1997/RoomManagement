@@ -9,16 +9,17 @@ import com.room.manage.api.room.model.entity.RoomId;
 import com.room.manage.api.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RoomServiceImpl implements RoomService{
 
     private final RoomRepository roomRepository;
-    private final ParticipationRepository participationRepository;
 
     /**
      * 해당 Room의 정보
@@ -34,7 +35,7 @@ public class RoomServiceImpl implements RoomService{
     }
 
         @Override
-        public List<SimpleRoomInfoDto> getAllRoomInfo() {
+        public List<SimpleRoomInfoDto> getAllRoomsInfo() {
             List<Room> rooms = roomRepository.findAll();
             return rooms.stream().map(it -> new SimpleRoomInfoDto(it)).collect(Collectors.toList());
     }

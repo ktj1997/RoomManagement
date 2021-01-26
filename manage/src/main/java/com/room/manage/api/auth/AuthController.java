@@ -27,6 +27,6 @@ public class AuthController {
     @ApiOperation("로그인")
     @PostMapping("/login")
     public LoginResponseDto loginResponseDto(@RequestBody LogInRequestDto logInRequestDto){
-        return authService.login(logInRequestDto);
+        return authService.signin(logInRequestDto);
     }
 }

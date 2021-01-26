@@ -7,6 +7,6 @@ import com.room.manage.api.user.model.entity.User;
 
 public interface AuthService {
     User signUp(SignUpRequestDto signUpRequestDto);
-    LoginResponseDto login(LogInRequestDto logInRequestDto);
+    LoginResponseDto signin(LogInRequestDto logInRequestDto);
 
 }
