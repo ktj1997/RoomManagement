@@ -21,7 +21,7 @@ public class ParticipationFactory {
     private String floor = "3";
     private String field = "B";
     private String date = simpleDateFormat.format(new Date());
-    private String endTime = "20:30";
+    private String endTime = "22:30";
 
     /**
      * Sleep
@@ -32,7 +32,7 @@ public class ParticipationFactory {
     /**
      * Extend
      */
-    private String extendTime = "21:30";
+    private String extendTime = "23:00";
 
     public ParticipationRequestDto getParticipationRequestDto()
     {

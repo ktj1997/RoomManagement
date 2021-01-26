@@ -28,8 +28,6 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ParticipationServiceTest {
 
     @Autowired
@@ -46,7 +44,7 @@ public class ParticipationServiceTest {
 
     private User user;
 
-    @BeforeAll
+    @BeforeEach
     void setUser()
     {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
@@ -55,7 +53,6 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    @Order(1)
     @DisplayName("참여 테스트")
     void joinTest()
     {
@@ -82,7 +79,6 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    @Order(2)
     @DisplayName("부재 테스트")
     void toSleepTest()
     {
@@ -116,10 +112,11 @@ public class ParticipationServiceTest {
     }
 
     @Test
-    @Order(3)
     @DisplayName("시간 연장 테스트")
     void extendTimeTest()
     {
+        ParticipationRequestDto participationRequestDto = commonFactory.participationFactory.getParticipationRequestDto();
+        ParticipationResponseDto participationResponseDto = Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         ParticipationResponseDto participationResponseDto1 = userService.findMyParticipation();
         ExtendTimeRequestDto extendTimeRequestDto = commonFactory.participationFactory.getExtendTimeRequestDto();
         Assertions.assertDoesNotThrow(() -> participationService.extendTime(extendTimeRequestDto));
