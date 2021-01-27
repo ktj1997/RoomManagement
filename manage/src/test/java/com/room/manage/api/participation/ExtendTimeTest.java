@@ -34,7 +34,7 @@ public class ExtendTimeTest extends IntegrationTest {
     void extendTimeTest()
     {
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:40");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:40",null);
         ParticipationResponseDto participationResponseDto1 = Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         ExtendTimeRequestDto extendTimeRequestDto = new ExtendTimeRequestDto(commonFactory.participationFactory.getDay()+"-22:50");
         ParticipationResponseDto participationResponseDto2 = Assertions.assertDoesNotThrow(() -> participationService.extendTime(extendTimeRequestDto));
@@ -49,7 +49,7 @@ public class ExtendTimeTest extends IntegrationTest {
     @DisplayName("연장 요청시간이 전체이용 종료시간보다 과거일 수 없음")
     void RequestFailedWhenExtendTimeRequestIsBeforeThanFinishTime(){
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:40");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:40",null);
         ParticipationResponseDto participationResponseDto1 = Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         ExtendTimeRequestDto extendTimeRequestDto = new ExtendTimeRequestDto(commonFactory.participationFactory.getDay()+"-22:20");
        Assertions.assertThrows(InvalidTimeRequestException.class,() -> participationService.extendTime(extendTimeRequestDto));

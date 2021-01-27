@@ -36,7 +36,7 @@ public class JoinTest extends IntegrationTest {
     void successfulJoinTest()
     {
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"22:59");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"22:59",null);
         ParticipationResponseDto participationResponseDto = assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
 
         assertEquals(participationResponseDto.getParticipationStatus(), ParticipationStatus.ACTIVE);
@@ -49,7 +49,7 @@ public class JoinTest extends IntegrationTest {
     @DisplayName("이미 참여중이라면 참여 실패")
     void RequestFailedWhenUserAlreadyParticipate(){
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"22:59");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"22:59",null);
         assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         assertThrows(AlreadyParticipateException.class,() -> participationService.joinRoom(participationRequestDto));
     }
@@ -59,7 +59,7 @@ public class JoinTest extends IntegrationTest {
     void RequestFailedWhenTimeIsExceed()
     {
         ParticipationRequestDto participationRequestDto=
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"23:30");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"23:30",null);
         assertThrows(InvalidTimeRequestException.class,() -> participationService.joinRoom(participationRequestDto));
     }
 
@@ -71,7 +71,7 @@ public class JoinTest extends IntegrationTest {
          * 테스트 실행시간은 8시 10분 이후라고 가정.
          */
         ParticipationRequestDto participationRequestDto=
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"08:10");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"08:10",null);
 
         assertThrows(InvalidTimeRequestException.class,() -> participationService.joinRoom(participationRequestDto));
     }
@@ -83,7 +83,7 @@ public class JoinTest extends IntegrationTest {
         Room room = roomRepository.findByFloorAndField("3","B").get();
         room.setNowNum(room.getMaxNum());
         ParticipationRequestDto participationRequestDto=
-                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"22:50");
+                new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-"+"22:50",null);
 
         assertThrows(AlreadyMaximumParticipantException.class,()->participationService.joinRoom(participationRequestDto));
 

@@ -39,7 +39,7 @@ public class SleepTest extends IntegrationTest {
     @DisplayName("성공적인 부재 테스트")
     void toSleepTest() {
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50");
+                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50",null);
         ParticipationResponseDto participationResponseDto = Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         ParticipationResponseDto participationResponseDtoAfterSleep = null;
 
@@ -56,7 +56,7 @@ public class SleepTest extends IntegrationTest {
     @DisplayName("부재 요청시간이 이용종료시간을 넘어가면 안됨")
     void RequestFailedWhenTimeIsExceed(){
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:40");
+                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:40",null);
         Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         SleepRequestDto sleepRequestDto = new SleepRequestDto(commonFactory.participationFactory.getDay()+"-22:50", SleepReason.TOILET);
         assertThrows(InvalidTimeRequestException.class,() -> participationService.toSleepStatus(sleepRequestDto));
@@ -67,7 +67,7 @@ public class SleepTest extends IntegrationTest {
     void RequestFailedWhenRemainSleepNumIsZero()
     {
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50");
+                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50",null);
         Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
         Participation participation = participationRepository.findByParticipant(user).get();
         participation.setRemainSleepNum(0);
@@ -81,7 +81,7 @@ public class SleepTest extends IntegrationTest {
     void RequestFailedWhenUserIsAlreadySleepStatus()
     {
         ParticipationRequestDto participationRequestDto =
-                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50");
+                new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50",null);
         Assertions.assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
 
         SleepRequestDto sleepRequestDto = new SleepRequestDto(commonFactory.participationFactory.getDay()+"-22:40", SleepReason.TOILET);

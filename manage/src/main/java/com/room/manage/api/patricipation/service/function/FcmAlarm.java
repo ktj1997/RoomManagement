@@ -9,6 +9,7 @@ import com.room.manage.api.patricipation.model.entity.AlarmType;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.core.util.AlarmUtil;
+import org.aspectj.bridge.MessageUtil;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,7 +18,8 @@ public class FcmAlarm implements SendAlarm{
     private final String ExitMsgTitle ="퇴실한 인원이 있습니다!";
     @Override
     public void send(User user, Room room, AlarmType alarmType) {
-        String alarmMessage = alarmType.equals(AlarmType.JOIN)?JoinMsgTitle:ExitMsgTitle;
+        String alarmMessageTitle = alarmType.equals(AlarmType.JOIN)?JoinMsgTitle:ExitMsgTitle;
+        String alarmMessageBody = alarmType.equals(AlarmType.JOIN)?AlarmUtil.joinMessage(user.getName()):AlarmUtil.exitMessage(user.getName());
         FirebaseMessaging fcmSender = FirebaseMessaging.getInstance();
 
         room.getParticipates().stream().map(participation->participation.getParticipant())
@@ -26,7 +28,7 @@ public class FcmAlarm implements SendAlarm{
                         if(participant.getFcmToken() != null) {
                             Message message = Message.builder()
                                     .setToken(participant.getFcmToken())
-                                    .setNotification(new Notification(alarmMessage, AlarmUtil.joinMessage(user.getName())))
+                                    .setNotification(new Notification(alarmMessageTitle, alarmMessageBody))
                                     .build();
                             fcmSender.send(message);
                         }
