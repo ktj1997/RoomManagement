@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResourceAccessException;
+
 import java.util.Date;
 
 @Service
@@ -44,7 +46,7 @@ public class ParticipationServiceImpl implements ParticipationService{
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
 
-        if(!DateUtil.checkValidDate(participationRequestDto.getFinishTime()))
+        if(!DateUtil.checkRequestDateIsNotPastAndValid(participationRequestDto.getFinishTime()))
             throw new InvalidTimeRequestException();
 
         else if(participationRepository.existsByParticipant(user))
@@ -70,17 +72,15 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     @Transactional(noRollbackFor = ConnectionClosedException.class)
     public void exitRoom(Long userId) {
-
         try{
             User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
             Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
             Room room = participation.getRoom();
 
-            participationRepository.delete(participation);
             room.exit();
-
+            participationRepository.delete(participation);
             sendAlarm.send(user,room);
-        }catch(Exception e){
+        }catch(ResourceAccessException e){
             throw new ConnectionClosedException();
         }
     }
@@ -131,11 +131,15 @@ public class ParticipationServiceImpl implements ParticipationService{
      * @param extendTimeRequestDto
      */
     @Override
-    public Date extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
+    public ParticipationResponseDto extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
-        participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
-        return participation.getFinishTime();
+        if(DateUtil.checkRequestDateIsNotPastAndValid(extendTimeRequestDto.getFinishTime())
+                && DateUtil.checkExtendRequestTimeIsAfterThanFinishTime(extendTimeRequestDto.getFinishTime(),participation.getFinishTime())){
+            participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
+            return new ParticipationResponseDto(participation);
+        } else
+            throw new InvalidTimeRequestException();
     }
 }

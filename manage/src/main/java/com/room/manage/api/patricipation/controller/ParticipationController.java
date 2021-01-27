@@ -43,7 +43,7 @@ public class ParticipationController {
      */
     @ApiOperation("시간 연장")
     @PostMapping("/extend")
-    public Date extendParticipation(@RequestBody ExtendTimeRequestDto extendTimeRequestDto)
+    public ParticipationResponseDto extendParticipation(@RequestBody ExtendTimeRequestDto extendTimeRequestDto)
     {
         return participationService.extendTime(extendTimeRequestDto);
     }

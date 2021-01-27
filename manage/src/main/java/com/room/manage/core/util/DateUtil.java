@@ -27,10 +27,20 @@ public class DateUtil {
         return fullDateFormat.format(date);
     }
 
+    public static boolean checkExtendRequestTimeIsAfterThanFinishTime(String date, Date finishTime){
+        boolean check = false;
+        try {
+            check = fullDateFormat.parse(date).after(finishTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
     /**
      * 이용시간인 8시부터 23시까지에 만족하는지, 지금보다 이후의 시간인지 확인
      */
-    public static boolean checkValidDate(String date){
+    public static boolean checkRequestDateIsNotPastAndValid(String date){
         String[] token = date.split("-");
         int length = token.length;
         Date fullDateTime=null,targetTime = null,startTime=null,finishTime=null,now=new Date();

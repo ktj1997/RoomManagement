@@ -59,7 +59,7 @@ class RoomServiceTest {
         /**
          * 참여 한 이후에는 참여자가 0명이면 안됨 + 상태가 Activate로 변화되어야함
          */
-        Assertions.assertDoesNotThrow(() ->participationService.joinRoom(commonFactory.participationFactory.getParticipationRequestDto()));
+        //Assertions.assertDoesNotThrow(() ->participationService.joinRoom(commonFactory.participationFactory.getParticipationRequestDto()));
         detailRoomInfoDto = Assertions.assertDoesNotThrow(() -> roomService.getRoomInfo(floor,field));
         Assertions.assertNotEquals(0, detailRoomInfoDto.getNowNum());
         Assertions.assertEquals(Status.ACTIVATE, detailRoomInfoDto.getStatus());

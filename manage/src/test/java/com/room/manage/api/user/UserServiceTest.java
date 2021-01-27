@@ -44,7 +44,7 @@ public class UserServiceTest{
     {
         Assertions.assertAll(
                 () -> Assertions.assertThrows(NoParticipationException.class,() ->userService.findMyParticipation()),
-                () -> Assertions.assertDoesNotThrow(() -> participationService.joinRoom(commonFactory.participationFactory.getParticipationRequestDto())),
+                //() -> Assertions.assertDoesNotThrow(() -> participationService.joinRoom(commonFactory.participationFactory.getParticipationRequestDto())),
                 () -> Assertions.assertDoesNotThrow(() -> userService.findMyParticipation())
         );
     }

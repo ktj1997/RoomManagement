@@ -41,6 +41,7 @@ public class Participation {
     /**
      * 남은 부재 가능 횟수
      */
+    @Setter
     private int remainSleepNum = 3;
 
     @OneToOne

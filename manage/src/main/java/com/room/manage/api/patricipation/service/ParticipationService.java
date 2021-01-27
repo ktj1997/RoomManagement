@@ -12,6 +12,6 @@ public interface ParticipationService {
     ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto);
     ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto);
     ParticipationResponseDto toActiveStatus(Sleep sleep);
-    Date extendTime(ExtendTimeRequestDto extendTimeRequestDto);
+    ParticipationResponseDto extendTime(ExtendTimeRequestDto extendTimeRequestDto);
     void exitRoom(Long userId);
 }
