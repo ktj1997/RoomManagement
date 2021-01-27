@@ -2,7 +2,7 @@ package com.room.manage.api.participation;
 
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
-import com.room.manage.api.patricipation.exception.ConnectionClosedException;
+import com.room.manage.api.patricipation.exception.AlarmExecutionException;
 import com.room.manage.api.patricipation.exception.NoParticipationException;
 import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
@@ -41,7 +41,7 @@ public class ExitTest extends IntegrationTest {
         /**
          * 테스트시 소켓서버 연결(x)상황
          */
-        assertThrows(ConnectionClosedException.class,() -> participationService.exitRoom(user.getId()));
+        assertThrows(AlarmExecutionException.class,() -> participationService.exitRoom(user.getId()));
         assertThrows(NoParticipationException.class,() -> userService.findMyParticipation());
     }
 

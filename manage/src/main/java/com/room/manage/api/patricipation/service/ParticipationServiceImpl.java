@@ -5,6 +5,7 @@ import com.room.manage.api.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
+import com.room.manage.api.patricipation.model.entity.AlarmType;
 import com.room.manage.api.patricipation.model.entity.Participation;
 import com.room.manage.api.patricipation.model.entity.ParticipationStatus;
 import com.room.manage.api.patricipation.model.entity.Sleep;
@@ -55,6 +56,8 @@ public class ParticipationServiceImpl implements ParticipationService{
         else if(!room.canJoin())
             throw new AlreadyMaximumParticipantException();
         else {
+            user.setFcmToken(participationRequestDto.getFcmToken());
+            sendAlarm.send(user,room, AlarmType.JOIN);
             participation = Participation.builder()
                     .user(user)
                     .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
@@ -70,7 +73,7 @@ public class ParticipationServiceImpl implements ParticipationService{
      * 퇴실
      */
     @Override
-    @Transactional(noRollbackFor = ConnectionClosedException.class)
+    @Transactional(noRollbackFor = AlarmExecutionException.class)
     public void exitRoom(Long userId) {
         try{
             User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
@@ -79,9 +82,9 @@ public class ParticipationServiceImpl implements ParticipationService{
 
             room.exit();
             participationRepository.delete(participation);
-            sendAlarm.send(user,room);
+            sendAlarm.send(user,room, AlarmType.EXIT);
         }catch(ResourceAccessException e){
-            throw new ConnectionClosedException();
+            throw new AlarmExecutionException();
         }
     }
     /**

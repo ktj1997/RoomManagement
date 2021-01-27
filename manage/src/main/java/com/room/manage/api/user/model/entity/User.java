@@ -1,9 +1,6 @@
 package com.room.manage.api.user.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 @Entity
@@ -36,6 +33,9 @@ public class User{
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     UserRole userRole;
+
+    @Setter
+    String fcmToken = null;
 
     @Builder
     public User(String userName, String password, String name,UserRole userRole)

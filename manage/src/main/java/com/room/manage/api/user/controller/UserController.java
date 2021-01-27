@@ -1,4 +1,4 @@
-package com.room.manage.api.user;
+package com.room.manage.api.user.controller;
 
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.user.service.UserService;
@@ -22,4 +22,11 @@ public class UserController {
         {
             return userService.findMyParticipation();
     }
+
+        @ApiOperation("Firebase 토큰 갱신")
+        @GetMapping("/token")
+        public void renewalFcmToken(@RequestParam String token)
+        {
+
+        }
 }

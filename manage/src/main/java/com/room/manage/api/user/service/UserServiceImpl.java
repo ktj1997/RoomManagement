@@ -31,4 +31,10 @@ public class UserServiceImpl implements UserService {
 
         return new ParticipationResponseDto(participation);
     }
+
+    @Override
+    public void renewalFcmToken(String token) {
+        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
+        user.setFcmToken(token);
+    }
 }

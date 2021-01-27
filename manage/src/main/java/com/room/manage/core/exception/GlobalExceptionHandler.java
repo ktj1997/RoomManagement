@@ -50,12 +50,12 @@ public class GlobalExceptionHandler {
             exceptionCode = ExceptionCode.ALREADY_PARTICIPATION;
         return new ExceptionResponse(HttpStatus.BAD_REQUEST,exceptionCode);
     }
-    @ExceptionHandler({ConnectionClosedException.class})
+    @ExceptionHandler({AlarmExecutionException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse SocketConnectionExceptionHandler(Exception e)
     {
         ExceptionCode exceptionCode = null;
-        if(e instanceof ConnectionClosedException)
+        if(e instanceof AlarmExecutionException)
             exceptionCode = ExceptionCode.CONNECTION_CLOSED;
         return new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR,exceptionCode);
     }
