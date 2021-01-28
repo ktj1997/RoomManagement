@@ -35,8 +35,8 @@ public class ExitTest extends IntegrationTest {
     void SuccessFulExitTest()
     {
         ParticipationRequestDto participationRequestDto
-                = new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:50",null);
-        ParticipationResponseDto participationResponseDto = assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto));
+                = new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:50");
+        ParticipationResponseDto participationResponseDto = assertDoesNotThrow(() -> participationService.joinRoom(participationRequestDto,null));
         assertNotNull(participationResponseDto);
         /**
          * 테스트시 소켓서버 연결(x)상황

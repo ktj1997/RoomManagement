@@ -1,6 +1,7 @@
 package com.room.manage.api.user;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.service.AuthService;
+import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.factory.CommonFactory;
 import com.room.manage.api.patricipation.exception.NoParticipationException;
 import com.room.manage.api.patricipation.service.ParticipationService;
@@ -12,6 +13,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class UserServiceTest{
@@ -35,6 +44,7 @@ public class UserServiceTest{
     {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
         user = authService.signUp(signUpRequestDto);
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getId(),"", List.of(new SimpleGrantedAuthority(user.getUserRole().toString()))));
     }
 
 
@@ -43,9 +53,9 @@ public class UserServiceTest{
     public void findParticipationTest()
     {
         Assertions.assertAll(
-                () -> Assertions.assertThrows(NoParticipationException.class,() ->userService.findMyParticipation()),
-                //() -> Assertions.assertDoesNotThrow(() -> participationService.joinRoom(commonFactory.participationFactory.getParticipationRequestDto())),
-                () -> Assertions.assertDoesNotThrow(() -> userService.findMyParticipation())
+                () -> assertThrows(NoParticipationException.class,() ->userService.findMyParticipation()),
+                () -> assertDoesNotThrow(() -> participationService.joinRoom(new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:50"),null)),
+                () -> assertDoesNotThrow(() -> userService.findMyParticipation())
         );
     }
 }

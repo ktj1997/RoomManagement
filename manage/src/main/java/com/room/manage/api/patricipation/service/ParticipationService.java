@@ -9,7 +9,7 @@ import com.room.manage.api.patricipation.model.entity.Sleep;
 import java.util.Date;
 
 public interface ParticipationService {
-    ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto);
+    ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto,String token);
     ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto);
     ParticipationResponseDto toActiveStatus(Sleep sleep);
     ParticipationResponseDto extendTime(ExtendTimeRequestDto extendTimeRequestDto);

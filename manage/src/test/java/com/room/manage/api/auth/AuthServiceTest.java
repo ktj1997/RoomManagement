@@ -1,37 +1,34 @@
 package com.room.manage.api.auth;
 
+import com.room.manage.api.IntegrationTest;
+import com.room.manage.api.auth.exception.DuplicateUserNameException;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
-import com.room.manage.api.auth.service.AuthService;
-import com.room.manage.factory.CommonFactory;
-import com.room.manage.api.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class AuthServiceTest {
-
-    @Autowired
-    AuthService authService;
-
-    @Autowired
-    CommonFactory commonFactory;
-
-    @Autowired
-    UserRepository userRepository;
+public class AuthServiceTest extends IntegrationTest {
 
     @Test
-    @DisplayName("회원가입 테스트")
-    void signUpTest()
+    @DisplayName("정상 회원가입 테스트")
+    void SuccessfulSignUpTest()
     {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
-        Assertions.assertAll(
+        assertAll(
                 () -> authService.signUp(signUpRequestDto),
-                () -> Assertions.assertNotEquals(0,userRepository.findAll().size())
+                () -> assertNotEquals(0,userRepository.findAll().size())
+        );
+    }
+
+    @Test
+    @DisplayName("중복 닉네임 불가")
+    void FailedWhenNameIsDuplicated()
+    {
+        SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
+        assertAll(
+                () -> authService.signUp(signUpRequestDto),
+                () -> assertThrows(DuplicateUserNameException.class,() -> authService.signUp(signUpRequestDto))
         );
     }
 }

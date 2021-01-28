@@ -23,12 +23,6 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        ParameterBuilder parameterBuilder = new ParameterBuilder();
-        parameterBuilder.name("Authorization")
-                .description("Access JWT token")
-                .modelRef(new ModelRef("String"))
-                .parameterType("header")
-                .required(false).build();
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .groupName("v1")
@@ -43,18 +37,13 @@ public class SwaggerConfig {
         return new ApiKey("JWT", "Authorization", "header");
     }
     private SecurityContext securityContext() {
-        return springfox
-                .documentation
-                .spi.service
-                .contexts
-                .SecurityContext
+        return   SecurityContext
                 .builder()
                 .securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
     }
     List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
+        authorizationScopes[0] =  new AuthorizationScope("global", "accessEverything");;
         return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
     }
 }

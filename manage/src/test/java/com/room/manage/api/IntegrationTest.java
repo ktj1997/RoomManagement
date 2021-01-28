@@ -4,6 +4,8 @@ import com.room.manage.api.auth.service.AuthService;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
 import com.room.manage.api.patricipation.service.ParticipationService;
 import com.room.manage.api.room.repository.RoomRepository;
+import com.room.manage.api.room.service.RoomService;
+import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.api.user.service.UserService;
 import com.room.manage.factory.CommonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class IntegrationTest {
 
     @Autowired
@@ -19,6 +21,9 @@ public class IntegrationTest {
 
     @Autowired
     protected ParticipationService participationService;
+
+    @Autowired
+    protected RoomService roomService;
 
     @Autowired
     protected UserService userService;
@@ -31,4 +36,7 @@ public class IntegrationTest {
 
     @Autowired
     protected ParticipationRepository participationRepository;
+
+    @Autowired
+    protected UserRepository userRepository;
 }

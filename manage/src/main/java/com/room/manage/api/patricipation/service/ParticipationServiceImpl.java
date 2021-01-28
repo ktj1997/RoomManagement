@@ -3,18 +3,18 @@ package com.room.manage.api.patricipation.service;
 import com.room.manage.api.patricipation.exception.*;
 import com.room.manage.api.patricipation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
-import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
+import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.entity.AlarmType;
 import com.room.manage.api.patricipation.model.entity.Participation;
 import com.room.manage.api.patricipation.model.entity.ParticipationStatus;
 import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.api.patricipation.repository.ParticipationRepository;
-import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
 import com.room.manage.api.patricipation.repository.SleepRepository;
 import com.room.manage.api.patricipation.service.function.SendAlarm;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.entity.Room;
+import com.room.manage.api.room.model.entity.RoomId;
 import com.room.manage.api.room.repository.RoomRepository;
 import com.room.manage.api.user.exception.UserNotExistException;
 import com.room.manage.api.user.model.entity.User;
@@ -31,7 +31,7 @@ import java.util.Date;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ParticipationServiceImpl implements ParticipationService{
+public class ParticipationServiceImpl implements ParticipationService {
 
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
@@ -40,24 +40,26 @@ public class ParticipationServiceImpl implements ParticipationService{
     private final SendAlarm sendAlarm;
 
     @Override
-    public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto) {
-        Room room = roomRepository.findByFloorAndField(participationRequestDto.getFloor(), participationRequestDto.getField())
+    public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto, String token) {
+        Room room = roomRepository.findById(new RoomId(participationRequestDto.getFloor(), participationRequestDto.getField()))
                 .orElseThrow(RoomNotExistException::new);
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName()))
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
 
-        if(!DateUtil.checkRequestDateIsNotPastAndValid(participationRequestDto.getFinishTime()))
+        if (!DateUtil.checkRequestDateIsNotPastAndValid(participationRequestDto.getFinishTime()))
             throw new InvalidTimeRequestException();
 
-        else if(participationRepository.existsByParticipant(user))
+        else if (participationRepository.existsByParticipant(user))
             throw new AlreadyParticipateException();
 
-        else if(!room.canJoin())
+        else if (!room.canJoin())
             throw new AlreadyMaximumParticipantException();
         else {
-            user.setFcmToken(participationRequestDto.getFcmToken());
-            sendAlarm.send(user,room, AlarmType.JOIN);
+            if (token != null) {
+                user.setFcmToken(token);
+                sendAlarm.send(user, room, AlarmType.JOIN);
+            }
             participation = Participation.builder()
                     .user(user)
                     .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
@@ -75,22 +77,24 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     @Transactional(noRollbackFor = AlarmExecutionException.class)
     public void exitRoom(Long userId) {
-        try{
+        try {
             User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
             Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
             Room room = participation.getRoom();
 
             room.exit();
             participationRepository.delete(participation);
-            sendAlarm.send(user,room, AlarmType.EXIT);
-        }catch(ResourceAccessException e){
+            sendAlarm.send(user, room, AlarmType.EXIT);
+        } catch (ResourceAccessException e) {
             throw new AlarmExecutionException();
         }
     }
+
     /**
      * Sleep 상태로 바꿔준다.
      * 만약 Room의 모든 인원이 Sleep이라면 Room의 상태 또한 Sleep으로 변경한다.
      * 부재시간은 이용종료시간을 넘어서 설정할 수 없다.
+     *
      * @param sleepRequestDto
      */
     @Override
@@ -99,19 +103,19 @@ public class ParticipationServiceImpl implements ParticipationService{
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
         Room room = participation.getRoom();
 
-        if(participation.getRemainSleepNum()>0){
-            if(participation.getSleep() == null){
-                if(DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime())) {
-                    Sleep sleep = new Sleep(new Date(),DateUtil.formatToDate(sleepRequestDto.getDate()),sleepRequestDto.getReason(),participation);
+        if (participation.getRemainSleepNum() > 0) {
+            if (participation.getSleep() == null) {
+                if (DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime())) {
+                    Sleep sleep = new Sleep(new Date(), DateUtil.formatToDate(sleepRequestDto.getDate()), sleepRequestDto.getReason(), participation);
                     room.setSleepNum(room.getSleepNum() + 1);
                     participation.toSleepStatus(sleep);
                     sleepRepository.save(sleep);
-                    return new ParticipationResponseDto(participation,sleep);
-                }else
+                    return new ParticipationResponseDto(participation, sleep);
+                } else
                     throw new InvalidTimeRequestException();
-            }else
+            } else
                 throw new AlreadySleepStatusException();
-        }else
+        } else
             throw new RemainSleepNumZeroException();
     }
 
@@ -122,7 +126,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     public ParticipationResponseDto toActiveStatus(Sleep sleep) {
         Participation participation = sleep.getParticipation();
         Room room = participation.getRoom();
-        room.setNowNum(room.getNowNum()-1);
+        room.setNowNum(room.getNowNum() - 1);
         participation.toActiveStatus();
         sleepRepository.delete(sleep);
 
@@ -131,6 +135,7 @@ public class ParticipationServiceImpl implements ParticipationService{
 
     /**
      * 현재 참여하고 있을 때, 시간 추가
+     *
      * @param extendTimeRequestDto
      */
     @Override
@@ -138,8 +143,8 @@ public class ParticipationServiceImpl implements ParticipationService{
         User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
-        if(DateUtil.checkRequestDateIsNotPastAndValid(extendTimeRequestDto.getFinishTime())
-                && DateUtil.checkExtendRequestTimeIsAfterThanFinishTime(extendTimeRequestDto.getFinishTime(),participation.getFinishTime())){
+        if (DateUtil.checkRequestDateIsNotPastAndValid(extendTimeRequestDto.getFinishTime())
+                && DateUtil.checkExtendRequestTimeIsAfterThanFinishTime(extendTimeRequestDto.getFinishTime(), participation.getFinishTime())) {
             participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
             return new ParticipationResponseDto(participation);
         } else

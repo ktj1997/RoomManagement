@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, RoomId> {
-    Optional<Room> findByFloorAndField(String floor, String field);
 }

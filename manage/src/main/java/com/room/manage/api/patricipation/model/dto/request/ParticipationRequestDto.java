@@ -19,7 +19,4 @@ public class ParticipationRequestDto{
      */
     @ApiModelProperty("종료시간 (yyyy-MM-dd-HH:mm) mm은 10분단위로 (0,10,20,30,40,50)")
     String finishTime;
-
-    @ApiModelProperty("Fcm Token")
-    String fcmToken;
 }

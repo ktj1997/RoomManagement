@@ -7,6 +7,7 @@ import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.patricipation.service.ParticipationService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,16 @@ public class ParticipationController {
     private final ParticipationService participationService;
 
     /**
-     * 방 참여
+     *
      * @param participationRequestDto 참여에 필요한 정보
+     * @param token fcmToken
+     * @return
      */
     @ApiOperation("입실")
     @PostMapping
-    public ParticipationResponseDto joinRoom(@RequestBody ParticipationRequestDto participationRequestDto)
+    public ParticipationResponseDto joinRoom(@RequestBody ParticipationRequestDto participationRequestDto,@RequestParam @Nullable String token)
     {
-        return participationService.joinRoom(participationRequestDto);
+        return participationService.joinRoom(participationRequestDto,token);
     }
 
     @ApiOperation("퇴실")
