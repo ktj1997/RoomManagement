@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@ApiModel
+@ApiModel("유저 정보")
 @Getter
 @AllArgsConstructor
 public class UserInfoDto

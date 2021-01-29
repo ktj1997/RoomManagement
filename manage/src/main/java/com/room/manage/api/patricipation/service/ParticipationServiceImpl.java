@@ -126,7 +126,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     public ParticipationResponseDto toActiveStatus(Sleep sleep) {
         Participation participation = sleep.getParticipation();
         Room room = participation.getRoom();
-        room.setNowNum(room.getNowNum() - 1);
+        room.setSleepNum(room.getSleepNum() - 1);
         participation.toActiveStatus();
         sleepRepository.delete(sleep);
 

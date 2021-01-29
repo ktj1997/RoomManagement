@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Sleep {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /**
      * 부재 시작시간

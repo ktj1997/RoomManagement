@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@ApiModel
+@ApiModel("부재 요청 Dto")
 @Getter
 @AllArgsConstructor
 public class SleepRequestDto {

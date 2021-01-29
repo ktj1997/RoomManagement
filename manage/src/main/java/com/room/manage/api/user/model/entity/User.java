@@ -12,7 +12,7 @@ public class User{
     /**
      * 식별자
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     /**
      * 유저 ID

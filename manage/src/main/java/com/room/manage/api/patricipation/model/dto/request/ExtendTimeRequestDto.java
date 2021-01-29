@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@ApiModel
+@ApiModel("시간 연잔 요청 Dto")
 @Getter
 @AllArgsConstructor
 public class ExtendTimeRequestDto {

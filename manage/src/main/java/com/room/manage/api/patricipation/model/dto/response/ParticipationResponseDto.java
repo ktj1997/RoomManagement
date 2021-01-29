@@ -4,11 +4,13 @@ import com.room.manage.api.patricipation.model.entity.Participation;
 import com.room.manage.api.patricipation.model.entity.ParticipationStatus;
 import com.room.manage.api.patricipation.model.entity.Sleep;
 import com.room.manage.core.util.DateUtil;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+@ApiModel("참가요청 결과 반환 Dto")
 @Getter
 @AllArgsConstructor
 @ToString

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@ApiModel
+@ApiModel("회원가입 요청 Dto")
 @Getter
 @AllArgsConstructor
 public class SignUpRequestDto {

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@ApiModel("간단한 Room 정보(리스트 용)")
+@ApiModel("Room 간단 정보(리스트 용)")
 @AllArgsConstructor
 public class SimpleRoomInfoDto {
 

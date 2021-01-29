@@ -28,8 +28,6 @@ public class ExitTest extends IntegrationTest {
         user = authService.signUp(signUpRequestDto);
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getId(),"", List.of(new SimpleGrantedAuthority(user.getUserRole().toString()))));
     }
-
-
     @Test
     @DisplayName("정상적인 퇴실 테스트")
     void SuccessFulExitTest()
@@ -41,7 +39,7 @@ public class ExitTest extends IntegrationTest {
         /**
          * 테스트시 소켓서버 연결(x)상황
          */
-        assertThrows(AlarmExecutionException.class,() -> participationService.exitRoom(user.getId()));
+        assertDoesNotThrow(() -> participationService.exitRoom(user.getId()));
         assertThrows(NoParticipationException.class,() -> userService.findMyParticipation());
     }
 
