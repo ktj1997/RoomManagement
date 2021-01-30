@@ -11,8 +11,8 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ApiModel("Room 상세정보")
 @Getter
+@ApiModel("Room 상세정보")
 @AllArgsConstructor
 public class DetailRoomInfoDto {
     /**

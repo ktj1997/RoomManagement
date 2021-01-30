@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@ApiModel("참가 요청 Dto")
 @Getter
+@ApiModel("참가 요청 Dto")
 @AllArgsConstructor
 public class ParticipationRequestDto{
     @ApiModelProperty("층 (3,4,5)")

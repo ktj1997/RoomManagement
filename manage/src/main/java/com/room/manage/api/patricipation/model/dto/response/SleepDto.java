@@ -5,10 +5,11 @@ import com.room.manage.api.patricipation.model.entity.SleepReason;
 import com.room.manage.core.util.DateUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-@ApiModel("Sleep 반환 Dto")
 @Getter
+@ApiModel("Sleep 반환 Dto")
+@AllArgsConstructor
 public class SleepDto {
 
     @ApiModelProperty("부재 시작시간")
