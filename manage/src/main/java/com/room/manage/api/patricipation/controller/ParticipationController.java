@@ -5,6 +5,7 @@ import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestD
 import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.patricipation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.patricipation.service.ParticipationService;
+import com.room.manage.core.util.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +35,7 @@ public class ParticipationController {
     @DeleteMapping
     public void exitRoom()
     {
-        participationService.exitRoom(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName()));
+        participationService.exitRoom(SecurityUtil.getUserIdFromToken());
     }
 
     /**

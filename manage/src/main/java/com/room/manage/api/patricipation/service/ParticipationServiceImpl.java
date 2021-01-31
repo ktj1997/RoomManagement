@@ -20,6 +20,7 @@ import com.room.manage.api.user.exception.UserNotExistException;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.core.util.DateUtil;
+import com.room.manage.core.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto, String token) {
         Room room = roomRepository.findById(new RoomId(participationRequestDto.getFloor(), participationRequestDto.getField()))
                 .orElseThrow(RoomNotExistException::new);
-        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName()))
+        User user = userRepository.findById(SecurityUtil.getUserIdFromToken())
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
 
@@ -99,7 +100,7 @@ public class ParticipationServiceImpl implements ParticipationService {
      */
     @Override
     public ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto) {
-        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
+        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
         Room room = participation.getRoom();
 
@@ -140,7 +141,7 @@ public class ParticipationServiceImpl implements ParticipationService {
      */
     @Override
     public ParticipationResponseDto extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
-        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
+        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
         if (DateUtil.checkRequestDateIsNotPastAndValid(extendTimeRequestDto.getFinishTime())
