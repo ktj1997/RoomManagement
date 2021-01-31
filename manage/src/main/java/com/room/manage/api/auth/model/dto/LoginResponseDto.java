@@ -4,9 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-@ApiModel("로그인 요청 반환 Dto")
 @Getter
+@ApiModel("로그인 요청 반환 Dto")
 public class LoginResponseDto {
 
     @ApiModelProperty("AccessToken")

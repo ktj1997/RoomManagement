@@ -3,9 +3,8 @@ package com.room.manage.api.auth.model.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
-
-@ApiModel("로그인 요청 Dto")
 @Getter
+@ApiModel("로그인 요청 Dto")
 public class LogInRequestDto {
 
     @ApiModelProperty("유저 아이디")

@@ -30,6 +30,7 @@ public class SimpleRoomInfoDto {
     @ApiModelProperty("룸 상태")
     Status roomStatus;
 
+    @ApiModelProperty("참여자들 정보")
     String participantInfo;
 
     public SimpleRoomInfoDto(Room room)

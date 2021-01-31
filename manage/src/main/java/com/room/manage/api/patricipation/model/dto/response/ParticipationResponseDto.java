@@ -10,10 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@ApiModel("참가요청 결과 반환 Dto")
 @Getter
+@ApiModel("참가요청 결과 반환 Dto")
 @AllArgsConstructor
-@ToString
 public class ParticipationResponseDto {
     /**
      * 유저 식별자

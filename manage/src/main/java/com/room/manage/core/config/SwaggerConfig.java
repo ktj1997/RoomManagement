@@ -27,7 +27,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .groupName("v1")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.room.manage"))
+                .apis(RequestHandlerSelectors.basePackage("com.room.manage.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .securityContexts(Arrays.asList(securityContext()))
