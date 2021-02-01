@@ -56,10 +56,9 @@ public class ParticipationServiceImpl implements ParticipationService {
         else if (!room.canJoin())
             throw new AlreadyMaximumParticipantException();
         else {
-            if (token != null) {
+            if (token != null)
                 user.setFcmToken(token);
-                sendAlarm.send(user, room, AlarmType.JOIN);
-            }
+            sendAlarm.send(user, room, AlarmType.JOIN);
             participation = Participation.builder()
                     .user(user)
                     .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
@@ -83,6 +82,7 @@ public class ParticipationServiceImpl implements ParticipationService {
             Room room = participation.getRoom();
 
             room.exit();
+            user.setFcmToken(null);
             participationRepository.delete(participation);
             sendAlarm.send(user, room, AlarmType.EXIT);
         } catch (ResourceAccessException e) {
