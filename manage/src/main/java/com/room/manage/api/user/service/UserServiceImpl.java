@@ -7,6 +7,7 @@ import com.room.manage.api.patricipation.repository.ParticipationRepository;
 import com.room.manage.api.user.exception.UserNotExistException;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.repository.UserRepository;
+import com.room.manage.core.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ParticipationResponseDto findMyParticipation() {
-        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
+        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
         return new ParticipationResponseDto(participation);
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void renewalFcmToken(String token) {
-        User user = userRepository.findById(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow(UserNotExistException::new);
+        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         user.setFcmToken(token);
     }
 }
