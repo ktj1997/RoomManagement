@@ -22,7 +22,6 @@ import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.core.util.DateUtil;
 import com.room.manage.core.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
@@ -41,6 +40,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final SendAlarm sendAlarm;
 
     @Override
+    @Transactional(noRollbackFor = AlarmExecutionException.class)
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto, String token) {
         Room room = roomRepository.findById(new RoomId(participationRequestDto.getFloor(), participationRequestDto.getField()))
                 .orElseThrow(RoomNotExistException::new);
@@ -59,7 +59,6 @@ public class ParticipationServiceImpl implements ParticipationService {
         else {
             if (token != null)
                 user.setFcmToken(token);
-            sendAlarm.send(user, room, AlarmType.JOIN);
             participation = Participation.builder()
                     .user(user)
                     .finishTime(DateUtil.formatToDate(participationRequestDto.getFinishTime()))
@@ -67,6 +66,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                     .room(room).build();
             participationRepository.save(participation);
             room.join();
+            sendAlarm.send(user, room, AlarmType.JOIN);
         }
         return new ParticipationResponseDto(participation);
     }

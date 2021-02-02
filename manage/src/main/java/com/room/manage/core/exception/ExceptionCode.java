@@ -24,7 +24,7 @@ public enum ExceptionCode {
     SLEEP_NUM_ZERO("PARTICIPATION-004","남은 부재신청 횟수가 없습니다."),
     ALREADY_SLEEP("PARTICIPATION-005","이미 부재 상태입니다."),
     MAXIMUM_PARTICIPANT("PARTICIPATION-006","이미 최대인원이 참여중입니다"),
-    CONNECTION_CLOSED("PARTICIPATION-007","소켓서버와 연결불량으로 세션 종료 작업이 완료되지 안았습니다."),
+    CONNECTION_CLOSED("PARTICIPATION-007","알람 전송이 오류로인해 완료되지 않았습니다."),
 
     /**
      * Room Exception
