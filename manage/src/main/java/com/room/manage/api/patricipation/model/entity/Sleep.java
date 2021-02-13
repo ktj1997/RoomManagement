@@ -38,7 +38,7 @@ public class Sleep {
     private SleepReason reason;
 
     @Setter
-    @OneToOne
+    @OneToOne(optional = false)
     private Participation participation;
 
     public Sleep(Date sleepStartTime,Date sleepFinishTime, SleepReason reason, Participation participation){

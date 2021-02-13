@@ -44,13 +44,13 @@ public class Participation {
     @Setter
     private int remainSleepNum = 3;
 
-    @OneToOne
+    @OneToOne(optional = false)
     User participant;
 
     /**
      * 참여하고 있는 방
      */
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumns({
             @JoinColumn(name = "floor",referencedColumnName = "floor"),
             @JoinColumn(name= "field",referencedColumnName = "field")
