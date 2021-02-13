@@ -1,4 +1,4 @@
-package com.room.manage.api.auth;
+package com.room.manage.api.auth.controller;
 
 import com.room.manage.api.auth.model.dto.LogInRequestDto;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;

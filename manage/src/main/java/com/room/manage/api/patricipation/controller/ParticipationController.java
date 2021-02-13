@@ -43,7 +43,7 @@ public class ParticipationController {
      * @param extendTimeRequestDto
      */
     @ApiOperation("시간 연장")
-    @PostMapping("/extend")
+    @PutMapping("/extend")
     public ParticipationResponseDto extendParticipation(@RequestBody ExtendTimeRequestDto extendTimeRequestDto)
     {
         return participationService.extendTime(extendTimeRequestDto);
@@ -55,7 +55,7 @@ public class ParticipationController {
      * @return SleepInfoDto
      */
     @ApiOperation("부재 신청")
-    @PostMapping("/sleep")
+    @PutMapping("/sleep")
     public ParticipationResponseDto toSleepStatus(@RequestBody SleepRequestDto sleepRequestDto)
     {
         return participationService.toSleepStatus(sleepRequestDto);

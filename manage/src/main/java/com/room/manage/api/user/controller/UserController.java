@@ -17,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
         @ApiOperation("내가 참여중인 스터디룸")
-        @GetMapping("/participate")
+        @GetMapping("/participation")
         public ParticipationResponseDto getParticipation()
         {
             return userService.findMyParticipation();
@@ -27,6 +27,6 @@ public class UserController {
         @GetMapping("/token")
         public void renewalFcmToken(@RequestParam String token)
         {
-
+            userService.renewalFcmToken(token);
         }
 }
