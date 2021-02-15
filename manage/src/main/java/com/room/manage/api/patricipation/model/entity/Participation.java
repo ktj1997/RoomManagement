@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -50,7 +52,7 @@ public class Participation {
     /**
      * 참여하고 있는 방
      */
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "floor",referencedColumnName = "floor"),
             @JoinColumn(name= "field",referencedColumnName = "field")
@@ -60,7 +62,7 @@ public class Participation {
     /**
      * 부재 정보
      */
-    @OneToOne(mappedBy ="participation",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
+    @OneToOne(mappedBy ="participation",cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     Sleep sleep = null;
 
     public void toSleepStatus(Sleep sleep)

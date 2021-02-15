@@ -30,6 +30,7 @@ public class RoomController {
     }
 
     @ApiOperation("모든 스터디룸 상황")
+    @GetMapping
     public List<SimpleRoomInfoDto> getAllRoomInfo()
     {
         return roomService.getAllRoomsInfo();
