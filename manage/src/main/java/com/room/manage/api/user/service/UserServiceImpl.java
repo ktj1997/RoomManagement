@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -26,6 +25,7 @@ public class UserServiceImpl implements UserService {
      * @return 참여장보
      */
     @Override
+    @Transactional(readOnly = true)
     public ParticipationResponseDto findMyParticipation() {
         User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void renewalFcmToken(String token) {
         User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         user.setFcmToken(token);

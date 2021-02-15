@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
@@ -37,6 +37,4 @@ public class RoomServiceImpl implements RoomService {
         List<Room> rooms = roomRepository.findAll();
         return rooms.stream().map(it -> new SimpleRoomInfoDto(it)).collect(Collectors.toList());
     }
-
-
 }
