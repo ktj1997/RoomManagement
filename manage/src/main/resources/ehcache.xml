@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <defaultCache eternal="false"
+                  maxElementsInMemory="100"
+    />
+    <cache name="com.room.manage.api.user.model.entity.User"
+           maxElementsInMemory="100"
+           timeToLiveSeconds="1200"
+           memoryStoreEvictionPolicy="LRU"/>
+</ehcache>

@@ -1,10 +1,15 @@
 package com.room.manage.api.user.model.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.cache.annotation.EnableCaching;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 @Entity
 @Getter
+@EnableCaching
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
 @AllArgsConstructor
 public class User{
