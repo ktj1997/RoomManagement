@@ -3,8 +3,8 @@ package com.room.manage.core.exception;
 
 import com.room.manage.api.auth.exception.DuplicateUserNameException;
 import com.room.manage.api.auth.exception.WrongLoginInfoException;
-import com.room.manage.api.patricipation.exception.*;
-import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
+import com.room.manage.api.participation.exception.*;
+import com.room.manage.api.participation.exception.AlreadyMaximumParticipantException;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.user.exception.UserNotExistException;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache>
     <defaultCache eternal="false"
-                  maxElementsInMemory="100"
-    />
+                  maxElementsInMemory="100"/>
+    <cache name="com.room.manage.api.room.model.entity.Room"
+           maxElementsInMemory="9"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="300"
+           memoryStoreEvictionPolicy="LRU"/>
+    <cache name="com.room.manage.api.participation.model.entity.Participation"
+           maxElementsInMemory="90"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="300"
+           memoryStoreEvictionPolicy="LRU"/>
     <cache name="com.room.manage.api.user.model.entity.User"
            maxElementsInMemory="100"
-           timeToLiveSeconds="1200"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="300"
            memoryStoreEvictionPolicy="LRU"/>
 </ehcache>

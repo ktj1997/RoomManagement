@@ -2,12 +2,12 @@ package com.room.manage.api.participation;
 
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
-import com.room.manage.api.patricipation.exception.AlreadyMaximumParticipantException;
-import com.room.manage.api.patricipation.exception.AlreadyParticipateException;
-import com.room.manage.api.patricipation.exception.InvalidTimeRequestException;
-import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
-import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
-import com.room.manage.api.patricipation.model.entity.ParticipationStatus;
+import com.room.manage.api.participation.exception.AlreadyMaximumParticipantException;
+import com.room.manage.api.participation.exception.AlreadyParticipateException;
+import com.room.manage.api.participation.exception.InvalidTimeRequestException;
+import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.api.participation.model.entity.ParticipationStatus;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.model.entity.RoomId;
 import com.room.manage.api.user.model.entity.User;

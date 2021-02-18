@@ -2,10 +2,10 @@ package com.room.manage.api.participation;
 
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
-import com.room.manage.api.patricipation.exception.InvalidTimeRequestException;
-import com.room.manage.api.patricipation.model.dto.request.ExtendTimeRequestDto;
-import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
-import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.api.participation.exception.InvalidTimeRequestException;
+import com.room.manage.api.participation.model.dto.request.ExtendTimeRequestDto;
+import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.user.model.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

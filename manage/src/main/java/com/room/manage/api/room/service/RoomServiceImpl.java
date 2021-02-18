@@ -4,6 +4,7 @@ import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.dto.DetailRoomInfoDto;
 import com.room.manage.api.room.model.dto.SimpleRoomInfoDto;
 import com.room.manage.api.room.model.entity.Room;
+import com.room.manage.api.room.model.entity.RoomId;
 import com.room.manage.api.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,13 @@ public class RoomServiceImpl implements RoomService {
      */
     @Override
     public DetailRoomInfoDto getRoomInfo(String floor, String field) {
-        Room room = roomRepository.findByFieldAndFloor(field, floor).orElseThrow(RoomNotExistException::new);
+        Room room = roomRepository.findById(new RoomId(floor,field)).orElseThrow(RoomNotExistException::new);
         return new DetailRoomInfoDto(room);
     }
 
     @Override
     public List<SimpleRoomInfoDto> getAllRoomsInfo() {
         List<Room> rooms = roomRepository.findAll();
-        return rooms.stream().map(it -> new SimpleRoomInfoDto(it)).collect(Collectors.toList());
+        return rooms.stream().map(SimpleRoomInfoDto::new).collect(Collectors.toList());
     }
 }

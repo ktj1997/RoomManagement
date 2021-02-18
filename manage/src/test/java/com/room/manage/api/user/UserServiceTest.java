@@ -1,10 +1,10 @@
 package com.room.manage.api.user;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.service.AuthService;
-import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.factory.CommonFactory;
-import com.room.manage.api.patricipation.exception.NoParticipationException;
-import com.room.manage.api.patricipation.service.ParticipationService;
+import com.room.manage.api.participation.exception.NoParticipationException;
+import com.room.manage.api.participation.service.ParticipationService;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.service.UserService;
 import org.junit.jupiter.api.Assertions;

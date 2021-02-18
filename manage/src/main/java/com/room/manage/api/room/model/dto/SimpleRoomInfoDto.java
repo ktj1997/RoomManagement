@@ -41,9 +41,6 @@ public class SimpleRoomInfoDto {
         nowNum = room.getNowNum();
         sleepNum = room.getSleepNum();
         roomStatus = room.getStatus();
-        participantInfo = room.getNowNum() == 0?"none":room.getParticipates().get(0).getParticipant().getName()+"외"+(nowNum-1)+"명";
+        participantInfo = room.getNowNum() == 0?"none":room.getParticipates().get(0).getParticipant().getName()+"외"+(room.getNowNum()-1)+"명";
     }
-
-
-
 }

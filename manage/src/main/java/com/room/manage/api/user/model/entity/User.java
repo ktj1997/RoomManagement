@@ -2,13 +2,14 @@ package com.room.manage.api.user.model.entity;
 
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.cache.annotation.EnableCaching;
 import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
 @Getter
-@EnableCaching
+@Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,10 +1,10 @@
 package com.room.manage.core.task;
 
-import com.room.manage.api.patricipation.model.entity.Participation;
-import com.room.manage.api.patricipation.model.entity.Sleep;
-import com.room.manage.api.patricipation.repository.ParticipationRepository;
-import com.room.manage.api.patricipation.repository.SleepRepository;
-import com.room.manage.api.patricipation.service.ParticipationService;
+import com.room.manage.api.participation.model.entity.Participation;
+import com.room.manage.api.participation.model.entity.Sleep;
+import com.room.manage.api.participation.repository.ParticipationRepository;
+import com.room.manage.api.participation.repository.SleepRepository;
+import com.room.manage.api.participation.service.ParticipationService;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.repository.RoomRepository;
 import com.room.manage.core.util.DateUtil;

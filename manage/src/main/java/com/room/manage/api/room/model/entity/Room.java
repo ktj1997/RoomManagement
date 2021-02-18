@@ -1,23 +1,28 @@
 package com.room.manage.api.room.model.entity;
 
-import com.room.manage.api.patricipation.model.entity.Participation;
+import com.room.manage.api.participation.model.entity.Participation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.servlet.http.Part;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @ApiModel
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
 @IdClass(RoomId.class)
-public class Room {
-
+public class Room{
     @ApiModelProperty("층")
     @Id
     @Column(length = 2)
@@ -47,18 +52,20 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Status status = Status.EMPTY;
 
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "room",fetch = FetchType.EAGER)
     List<Participation> participates = new ArrayList<>();
 
     /**
      * 퇴실
      */
-    public void exit()
+    public void exit(Participation participation)
     {
         if(nowNum <= 0)
             throw new RuntimeException("현재 참여인원수가 음수가 될 수 없습니다.");
         else{
             nowNum -- ;
+            this.participates.remove(participation);
             if(nowNum == 0)
                 status = Status.EMPTY;
         }
@@ -67,11 +74,12 @@ public class Room {
     /**
      * 입실
      */
-    public void join()
+    public void join(Participation participation)
     {
         if(nowNum==0)
             status = Status.ACTIVATE;
         nowNum++;
+        this.participates.add(participation);
     }
     public boolean canJoin()
     {

@@ -1,15 +1,14 @@
 package com.room.manage.api.user.service;
 
-import com.room.manage.api.patricipation.exception.NoParticipationException;
-import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
-import com.room.manage.api.patricipation.model.entity.Participation;
-import com.room.manage.api.patricipation.repository.ParticipationRepository;
+import com.room.manage.api.participation.exception.NoParticipationException;
+import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.api.participation.model.entity.Participation;
+import com.room.manage.api.participation.repository.ParticipationRepository;
 import com.room.manage.api.user.exception.UserNotExistException;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.core.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

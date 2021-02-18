@@ -2,7 +2,7 @@ package com.room.manage.api.room;
 
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
-import com.room.manage.api.patricipation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.dto.DetailRoomInfoDto;
 import com.room.manage.api.room.model.entity.Status;

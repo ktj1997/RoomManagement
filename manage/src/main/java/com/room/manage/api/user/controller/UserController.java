@@ -1,6 +1,6 @@
 package com.room.manage.api.user.controller;
 
-import com.room.manage.api.patricipation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
