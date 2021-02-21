@@ -23,7 +23,7 @@
 
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/mylog-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <fileNamePattern>./logs/%d{yyyy-MM-dd}.%i-APP_LOG.txt</fileNamePattern>
             <!-- rollover daily -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
@@ -42,7 +42,7 @@
 
     <appender name="EXIT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/EXIT_LOG-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <fileNamePattern>./logs/%d{yyyy-MM-dd}.%i-EXIT_LOG.txt</fileNamePattern>
             <!-- rollover daily -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
@@ -56,7 +56,7 @@
 
     <appender name="JOIN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/JOIN_LOG-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <fileNamePattern>./logs/%d{yyyy-MM-dd}.%i-JOIN_LOG.txt</fileNamePattern>
             <!-- rollover daily -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
@@ -67,13 +67,12 @@
             <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="com.room.manage.core.aop.ExitLogging" level="INFO">
+    <logger name="com.room.manage.core.aop.ExitLogging" level="TRACE">
         <appender-ref ref="EXIT_LOG" />
     </logger>
-    <logger name="com.room.manage.core.aop.JoinLogging" level="INFO" >
+    <logger name="com.room.manage.core.aop.JoinLogging" level="TRACE" >
         <appender-ref ref="JOIN_LOG" />
     </logger>
-
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ROLLING"/>
