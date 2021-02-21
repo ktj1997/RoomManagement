@@ -1,0 +1,179 @@
+18:39:55.161 INFO  com.room.manage.ManageApplication - Starting ManageApplication using Java 11 on DESKTOP-M49JJ9C with PID 18076 (C:\Users\82102\IdeaProjects\RoomManagement\manage\build\classes\java\main started by 82102 in C:\Users\82102\IdeaProjects\RoomManagement)
+18:39:55.163 INFO  com.room.manage.ManageApplication - No active profile set, falling back to default profiles: default
+18:39:55.228 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\82102\.gradle\caches\modules-2\files-2.1\io.grpc\grpc-netty-shaded\1.13.1\ccdc4f2c2791d93164c574fbfb90d614aa0849ae\grpc-netty-shaded-1.13.1.jar referenced one or more files that do not exist: file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-core-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-context-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/gson-2.7.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/guava-20.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/error_prone_annotations-2.1.2.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/jsr305-3.0.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-contrib-grpc-metrics-0.12.3.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-api-0.12.3.jar
+18:39:55.229 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:39:55.229 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:39:56.518 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:39:56.651 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 125 ms. Found 4 JPA repository interfaces.
+18:39:57.625 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:39:57.636 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:39:57.636 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:39:57.637 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.41]
+18:39:57.868 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:39:57.869 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2639 ms
+18:39:57.950 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:39:58.216 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:39:58.221 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:mysql://localhost:3306/RoomManagement?serverTimezone=Asia/Seoul&characterEncoding=UTF-8'
+18:39:58.670 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:39:58.738 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.27.Final
+18:39:58.905 WARN  org.hibernate.orm.deprecation - HHH020100: The Ehcache second-level cache provider for Hibernate is deprecated.  See https://hibernate.atlassian.net/browse/HHH-12441 for details.
+18:39:58.918 INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:39:59.033 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+18:39:59.411 WARN  org.hibernate.orm.cache - HHH90001006: Missing cache[com.room.manage.api.room.model.entity.Room.participates] was created on-the-fly. The created cache will use a provider-specific default configuration: make sure you defined one. You can disable this warning by setting 'hibernate.cache.ehcache.missing_cache_strategy' to 'create'.
+18:40:00.616 INFO  o.h.t.s.internal.SchemaCreatorImpl - HHH000476: Executing import script 'file:/C:/Users/82102/IdeaProjects/RoomManagement/manage/build/resources/main/import.sql'
+18:40:00.655 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:40:00.672 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:40:00.764 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:40:01.211 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:40:02.220 INFO  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: d8eb9e49-771b-409f-a3cc-7e6c91f1deaa
+
+18:40:02.301 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@21953dc0, org.springframework.security.web.context.SecurityContextPersistenceFilter@6c0cb343, org.springframework.security.web.header.HeaderWriterFilter@72e354db, org.springframework.security.web.authentication.logout.LogoutFilter@5c29b2bf, com.room.manage.core.security.JwtFilter@6bbf0520, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2b09dd42, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@61070c0f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7b8fece6, org.springframework.security.web.session.SessionManagementFilter@5df13ebb, org.springframework.security.web.access.ExceptionTranslationFilter@1eec7ec0, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@89e78a7]
+18:40:02.324 INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+18:40:02.447 INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+18:40:02.687 INFO  o.s.s.c.ThreadPoolTaskScheduler - Initializing ExecutorService 'taskScheduler'
+18:40:02.773 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:40:02.792 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:40:02.793 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+18:40:02.807 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+18:40:02.859 INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+18:40:03.003 INFO  com.room.manage.ManageApplication - Started ManageApplication in 8.255 seconds (JVM running for 10.388)
+18:42:19.722 INFO  com.room.manage.ManageApplication - Starting ManageApplication using Java 11 on DESKTOP-M49JJ9C with PID 2204 (C:\Users\82102\IdeaProjects\RoomManagement\manage\build\classes\java\main started by 82102 in C:\Users\82102\IdeaProjects\RoomManagement)
+18:42:19.726 INFO  com.room.manage.ManageApplication - No active profile set, falling back to default profiles: default
+18:42:19.820 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\82102\.gradle\caches\modules-2\files-2.1\io.grpc\grpc-netty-shaded\1.13.1\ccdc4f2c2791d93164c574fbfb90d614aa0849ae\grpc-netty-shaded-1.13.1.jar referenced one or more files that do not exist: file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-core-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-context-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/gson-2.7.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/guava-20.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/error_prone_annotations-2.1.2.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/jsr305-3.0.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-contrib-grpc-metrics-0.12.3.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-api-0.12.3.jar
+18:42:19.820 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:42:19.820 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:42:21.025 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:42:21.178 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 142 ms. Found 4 JPA repository interfaces.
+18:42:22.000 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:42:22.009 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:42:22.009 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:42:22.010 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.41]
+18:42:22.224 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:42:22.225 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2404 ms
+18:42:22.279 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:42:22.516 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:42:22.521 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:mysql://localhost:3306/RoomManagement?serverTimezone=Asia/Seoul&characterEncoding=UTF-8'
+18:42:22.993 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:42:23.047 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.27.Final
+18:42:23.189 WARN  org.hibernate.orm.deprecation - HHH020100: The Ehcache second-level cache provider for Hibernate is deprecated.  See https://hibernate.atlassian.net/browse/HHH-12441 for details.
+18:42:23.203 INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:42:23.308 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+18:42:23.668 WARN  org.hibernate.orm.cache - HHH90001006: Missing cache[com.room.manage.api.room.model.entity.Room.participates] was created on-the-fly. The created cache will use a provider-specific default configuration: make sure you defined one. You can disable this warning by setting 'hibernate.cache.ehcache.missing_cache_strategy' to 'create'.
+18:42:24.787 INFO  o.h.t.s.internal.SchemaCreatorImpl - HHH000476: Executing import script 'file:/C:/Users/82102/IdeaProjects/RoomManagement/manage/build/resources/main/import.sql'
+18:42:24.834 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:42:24.847 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:42:24.914 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:42:25.307 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:42:26.216 INFO  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 3feea374-5297-4c01-a3a9-05d119ba8bc0
+
+18:42:26.296 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7c27e30d, org.springframework.security.web.context.SecurityContextPersistenceFilter@39029b4a, org.springframework.security.web.header.HeaderWriterFilter@46b3363c, org.springframework.security.web.authentication.logout.LogoutFilter@37d85d6f, com.room.manage.core.security.JwtFilter@e613f4f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@196d5463, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5ec05560, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5aad908d, org.springframework.security.web.session.SessionManagementFilter@5748c852, org.springframework.security.web.access.ExceptionTranslationFilter@77ff9c01, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@50fe287a]
+18:42:26.317 INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+18:42:26.463 INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+18:42:26.746 INFO  o.s.s.c.ThreadPoolTaskScheduler - Initializing ExecutorService 'taskScheduler'
+18:42:26.841 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:42:26.861 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:42:26.862 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+18:42:26.875 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+18:42:26.922 INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+18:42:27.077 INFO  com.room.manage.ManageApplication - Started ManageApplication in 7.771 seconds (JVM running for 9.603)
+18:42:47.975 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+18:42:47.976 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+18:42:47.978 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+18:42:48.220 WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.room.manage.api.user.exception.UserNotExistException]
+18:43:25.528 TRACE com.room.manage.core.aop.JoinLogging - 2021-02-21-18:43::: ktj7916 님이 3층 B호 입장!
+18:43:49.045 TRACE com.room.manage.core.aop.ExitLogging - 2021-02-21-18:43::: ktj7916 님이 퇴장!
+18:45:52.249 INFO  com.room.manage.ManageApplication - Starting ManageApplication using Java 11 on DESKTOP-M49JJ9C with PID 7492 (C:\Users\82102\IdeaProjects\RoomManagement\manage\build\classes\java\main started by 82102 in C:\Users\82102\IdeaProjects\RoomManagement)
+18:45:52.254 INFO  com.room.manage.ManageApplication - No active profile set, falling back to default profiles: default
+18:45:52.322 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\82102\.gradle\caches\modules-2\files-2.1\io.grpc\grpc-netty-shaded\1.13.1\ccdc4f2c2791d93164c574fbfb90d614aa0849ae\grpc-netty-shaded-1.13.1.jar referenced one or more files that do not exist: file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-core-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-context-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/gson-2.7.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/guava-20.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/error_prone_annotations-2.1.2.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/jsr305-3.0.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-contrib-grpc-metrics-0.12.3.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-api-0.12.3.jar
+18:45:52.323 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:45:52.323 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:45:53.520 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:45:53.674 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 144 ms. Found 4 JPA repository interfaces.
+18:45:54.551 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:45:54.559 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:45:54.560 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:45:54.560 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.41]
+18:45:54.761 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:45:54.762 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2438 ms
+18:45:54.816 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:45:55.072 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:45:55.078 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:mysql://localhost:3306/RoomManagement?serverTimezone=Asia/Seoul&characterEncoding=UTF-8'
+18:45:55.519 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:45:55.569 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.27.Final
+18:45:55.744 WARN  org.hibernate.orm.deprecation - HHH020100: The Ehcache second-level cache provider for Hibernate is deprecated.  See https://hibernate.atlassian.net/browse/HHH-12441 for details.
+18:45:55.767 INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:45:55.887 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+18:45:56.233 WARN  org.hibernate.orm.cache - HHH90001006: Missing cache[com.room.manage.api.room.model.entity.Room.participates] was created on-the-fly. The created cache will use a provider-specific default configuration: make sure you defined one. You can disable this warning by setting 'hibernate.cache.ehcache.missing_cache_strategy' to 'create'.
+18:45:57.263 INFO  o.h.t.s.internal.SchemaCreatorImpl - HHH000476: Executing import script 'file:/C:/Users/82102/IdeaProjects/RoomManagement/manage/build/resources/main/import.sql'
+18:45:57.304 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:45:57.315 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:45:57.377 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:45:57.772 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:45:58.666 INFO  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 49ffc8ce-a5d7-4a29-b505-09be257d9fb3
+
+18:45:58.757 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e47c204, org.springframework.security.web.context.SecurityContextPersistenceFilter@4fb902ae, org.springframework.security.web.header.HeaderWriterFilter@18731cde, org.springframework.security.web.authentication.logout.LogoutFilter@35a5ff95, com.room.manage.core.security.JwtFilter@49877228, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5974535e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3ef1776d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@42b524ac, org.springframework.security.web.session.SessionManagementFilter@6874d0c0, org.springframework.security.web.access.ExceptionTranslationFilter@56d5a51d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@756683cd]
+18:45:58.785 INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+18:45:58.910 INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+18:45:59.117 INFO  o.s.s.c.ThreadPoolTaskScheduler - Initializing ExecutorService 'taskScheduler'
+18:45:59.198 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:45:59.215 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:45:59.216 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+18:45:59.230 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+18:45:59.273 INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+18:45:59.414 INFO  com.room.manage.ManageApplication - Started ManageApplication in 7.615 seconds (JVM running for 9.407)
+18:46:23.352 INFO  com.room.manage.ManageApplication - Starting ManageApplication using Java 11 on DESKTOP-M49JJ9C with PID 6648 (C:\Users\82102\IdeaProjects\RoomManagement\manage\build\classes\java\main started by 82102 in C:\Users\82102\IdeaProjects\RoomManagement)
+18:46:23.355 INFO  com.room.manage.ManageApplication - No active profile set, falling back to default profiles: default
+18:46:23.419 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\82102\.gradle\caches\modules-2\files-2.1\io.grpc\grpc-netty-shaded\1.13.1\ccdc4f2c2791d93164c574fbfb90d614aa0849ae\grpc-netty-shaded-1.13.1.jar referenced one or more files that do not exist: file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-core-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/grpc-context-1.13.1.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/gson-2.7.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/guava-20.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/error_prone_annotations-2.1.2.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/jsr305-3.0.0.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-contrib-grpc-metrics-0.12.3.jar,file:/C:/Users/82102/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.13.1/ccdc4f2c2791d93164c574fbfb90d614aa0849ae/opencensus-api-0.12.3.jar
+18:46:23.419 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:46:23.419 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:46:24.626 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:46:24.751 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 115 ms. Found 4 JPA repository interfaces.
+18:46:25.587 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:46:25.597 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:46:25.597 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:46:25.598 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.41]
+18:46:25.850 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:46:25.851 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2430 ms
+18:46:25.917 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:46:26.177 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:46:26.182 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:mysql://localhost:3306/RoomManagement?serverTimezone=Asia/Seoul&characterEncoding=UTF-8'
+18:46:26.624 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:46:26.684 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.27.Final
+18:46:26.812 WARN  org.hibernate.orm.deprecation - HHH020100: The Ehcache second-level cache provider for Hibernate is deprecated.  See https://hibernate.atlassian.net/browse/HHH-12441 for details.
+18:46:26.830 INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:46:26.938 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+18:46:27.278 WARN  org.hibernate.orm.cache - HHH90001006: Missing cache[com.room.manage.api.room.model.entity.Room.participates] was created on-the-fly. The created cache will use a provider-specific default configuration: make sure you defined one. You can disable this warning by setting 'hibernate.cache.ehcache.missing_cache_strategy' to 'create'.
+18:46:28.362 INFO  o.h.t.s.internal.SchemaCreatorImpl - HHH000476: Executing import script 'file:/C:/Users/82102/IdeaProjects/RoomManagement/manage/build/resources/main/import.sql'
+18:46:28.405 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:46:28.415 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:46:28.477 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:46:28.892 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:46:29.779 INFO  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 48a1af04-9759-4301-9376-bffd5ee03f94
+
+18:46:29.872 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62b9d2b5, org.springframework.security.web.context.SecurityContextPersistenceFilter@406febef, org.springframework.security.web.header.HeaderWriterFilter@6c072ff6, org.springframework.security.web.authentication.logout.LogoutFilter@47f5767b, com.room.manage.core.security.JwtFilter@4d0c550b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@152767f8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5ab16b0c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@d9c310d, org.springframework.security.web.session.SessionManagementFilter@56f2e4d9, org.springframework.security.web.access.ExceptionTranslationFilter@5aa9e795, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6323690a]
+18:46:29.901 INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+18:46:30.029 INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+18:46:30.252 INFO  o.s.s.c.ThreadPoolTaskScheduler - Initializing ExecutorService 'taskScheduler'
+18:46:30.334 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:46:30.352 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:46:30.353 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Context refreshed
+18:46:30.366 INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+18:46:30.414 INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+18:46:30.589 INFO  com.room.manage.ManageApplication - Started ManageApplication in 7.636 seconds (JVM running for 9.563)
+18:47:00.028 INFO  c.r.m.core.schedule.ScheduledTask - new Day
+18:47:00.433 INFO  c.r.m.core.schedule.ScheduledTask - 2021-02-20.0-APP_LOG.txt DELETE true
+18:47:00.453 INFO  c.r.m.core.schedule.ScheduledTask - 2021-02-20.0-EXIT_LOG.txt DELETE true
+18:47:00.480 INFO  c.r.m.core.schedule.ScheduledTask - 2021-02-20.0-JOIN_LOG.txt DELETE true
+18:47:54.140 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+18:47:54.141 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+18:47:54.142 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+18:47:56.981 TRACE com.room.manage.core.aop.JoinLogging - 2021-02-21-18:47::: ktj7916 님이 3층 B호 입장!
+18:48:00.735 TRACE com.room.manage.core.aop.ExitLogging - 2021-02-21-18:48::: ktj7916 님이 퇴장!

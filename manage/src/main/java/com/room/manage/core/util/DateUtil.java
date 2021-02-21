@@ -6,13 +6,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
-    private static Calendar cal = Calendar.getInstance();
+    public static Calendar cal = Calendar.getInstance();
     private static SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
     private static SimpleDateFormat hourAndMinuteFormat = new SimpleDateFormat("HH:mm");
+    private static SimpleDateFormat yearAndDayFormat = new SimpleDateFormat("yyy-MM-dd");
 
     private static final String StartTime = "08:00";
-    private static final String FinishTime ="23:00";
+    private static final String FinishTime = "23:00";
 
+    public static String parseYearAndDayFormatToString(Date date) {
+        return yearAndDayFormat.format(date);
+    }
 
     public static Date formatToDate(String date) {
         try {
@@ -22,12 +26,12 @@ public class DateUtil {
             return null;
         }
     }
-    public static String formatToString(Date date)
-    {
+
+    public static String formatToString(Date date) {
         return fullDateFormat.format(date);
     }
 
-    public static boolean checkExtendRequestTimeIsAfterThanFinishTime(String date, Date finishTime){
+    public static boolean checkExtendRequestTimeIsAfterThanFinishTime(String date, Date finishTime) {
         boolean check = false;
         try {
             check = fullDateFormat.parse(date).after(finishTime);
@@ -40,24 +44,24 @@ public class DateUtil {
     /**
      * 이용시간인 8시부터 23시까지에 만족하는지, 지금보다 이후의 시간인지 확인
      */
-    public static boolean checkRequestDateIsNotPastAndValid(String date){
+    public static boolean checkRequestDateIsNotPastAndValid(String date) {
         String[] token = date.split("-");
         int length = token.length;
-        Date fullDateTime=null,targetTime = null,startTime=null,finishTime=null,now=new Date();
+        Date fullDateTime = null, targetTime = null, startTime = null, finishTime = null, now = new Date();
         try {
             fullDateTime = fullDateFormat.parse(date);
-            targetTime = hourAndMinuteFormat.parse(token[length-1]);
+            targetTime = hourAndMinuteFormat.parse(token[length - 1]);
             startTime = hourAndMinuteFormat.parse(StartTime);
             finishTime = hourAndMinuteFormat.parse(FinishTime);
             now = hourAndMinuteFormat.parse(hourAndMinuteFormat.format(new Date()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-            if(targetTime.before(startTime)
-                    || targetTime.after(finishTime)
-                    || targetTime.before(now)
-                    || fullDateTime.before(new Date()))
-                return false;
+        if (targetTime.before(startTime)
+                || targetTime.after(finishTime)
+                || targetTime.before(now)
+                || fullDateTime.before(new Date()))
+            return false;
         return true;
     }
 }

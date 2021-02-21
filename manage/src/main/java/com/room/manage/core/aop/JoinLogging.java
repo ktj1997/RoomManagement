@@ -37,7 +37,7 @@ public class JoinLogging {
             for (Object obj : pjp.getArgs()) {
                 if (obj instanceof ParticipationRequestDto) {
                     participationRequestDto = (ParticipationRequestDto) obj;
-                    logger.info(LogUtil.joinLogStringFormat(user.getUserName(), participationRequestDto));
+                    logger.trace(LogUtil.joinLogStringFormat(user.getUserName(), participationRequestDto));
                     break;
                 }
             }

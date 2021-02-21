@@ -26,7 +26,7 @@ public class ExitLogging {
     public Object ExitLog(ProceedingJoinPoint pjp) throws Throwable {
         User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         Object result = pjp.proceed();
-        logger.info(LogUtil.exitLogStringFormat(user.getUserName()));
+        logger.trace(LogUtil.exitLogStringFormat(user.getUserName()));
         return result;
     }
 }

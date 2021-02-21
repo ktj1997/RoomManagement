@@ -1,0 +1,1 @@
+18:47:56.981 TRACE com.room.manage.core.aop.JoinLogging - 2021-02-21-18:47::: ktj7916 님이 3층 B호 입장!
