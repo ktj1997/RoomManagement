@@ -20,6 +20,8 @@ import com.room.manage.api.room.repository.RoomRepository;
 import com.room.manage.api.user.exception.UserNotExistException;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.repository.UserRepository;
+import com.room.manage.core.aop.annotation.ExitLog;
+import com.room.manage.core.aop.annotation.JoinLog;
 import com.room.manage.core.util.DateUtil;
 import com.room.manage.core.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final ParticipationCacheFunction participationCacheFunction;
 
     @Override
+    @JoinLog
     @Transactional(noRollbackFor = AlarmExecutionException.class)
     public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto, String token) {
         Room room = roomRepository.findById(new RoomId(participationRequestDto.getFloor(), participationRequestDto.getField()))
@@ -77,6 +80,7 @@ public class ParticipationServiceImpl implements ParticipationService {
      * 퇴실
      */
     @Override
+    @ExitLog
     @Transactional(noRollbackFor = AlarmExecutionException.class)
     public void exitRoom(Long userId) {
         try {
@@ -151,7 +155,6 @@ public class ParticipationServiceImpl implements ParticipationService {
         if (DateUtil.checkRequestDateIsNotPastAndValid(extendTimeRequestDto.getFinishTime())
                 && DateUtil.checkExtendRequestTimeIsAfterThanFinishTime(extendTimeRequestDto.getFinishTime(), participation.getFinishTime())) {
             participation.setFinishTime(DateUtil.formatToDate(extendTimeRequestDto.getFinishTime()));
-            participationCacheFunction.removeParticipationCache(participation.getId());
             return new ParticipationResponseDto(participation);
         } else
             throw new InvalidTimeRequestException();
