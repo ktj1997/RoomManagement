@@ -7,11 +7,10 @@ import com.room.manage.api.participation.repository.SleepRepository;
 import com.room.manage.api.participation.service.ParticipationService;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.repository.RoomRepository;
+import com.room.manage.core.aop.annotation.DailyLog;
 import com.room.manage.core.config.S3Config;
 import com.room.manage.core.util.DateUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -84,21 +82,22 @@ public class ScheduledTask {
 
     /**
      * 12시 마다 전날의 LOG s3에 올리고 LOCAL에서 삭제
+     * 1분은 딜레이가 있을수도 있어서
      */
-    @Scheduled(cron = "0 0 0 * * *")
+    @DailyLog
+    @Scheduled(cron = "0 1 0 * * *")
     public void storeLogToS3() throws IOException {
-        logger.info("new Day");
-        Collection<File> logs = FileUtils.listFiles(new File("./logs"), TrueFileFilter.INSTANCE,TrueFileFilter.INSTANCE);
+        File dir = new File(System.getProperty("user.dir") + "/logs");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE,-1);
-        String yesterDay = DateUtil.parseYearAndDayFormatToString(cal.getTime());
-        for (File file : logs) {
-            if(file.exists()){
+        cal.add(Calendar.DATE, -1);
+        String yesterday = DateUtil.parseYearAndDayFormatToString(cal.getTime());
+        for (File file : dir.listFiles()) {
+            if (file.exists()) {
                 String fileName = file.getName();
-                if(fileName.startsWith(yesterDay)){
+                if (fileName.startsWith(yesterday)) {
                     s3Config.storeLogToS3(file);
                     boolean successful = file.delete();
-                    logger.info(String.format("%s DELETE %s",fileName,successful));
+                    logger.info(String.format("%s DELETE %s", fileName, successful));
                 }
             }
         }
