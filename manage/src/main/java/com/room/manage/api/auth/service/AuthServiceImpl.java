@@ -5,6 +5,7 @@ import com.room.manage.api.auth.exception.WrongLoginInfoException;
 import com.room.manage.api.auth.model.dto.LogInRequestDto;
 import com.room.manage.api.auth.model.dto.LoginResponseDto;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
+import com.room.manage.api.auth.model.dto.SignUpResponseDto;
 import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.model.entity.UserRole;
 import com.room.manage.api.user.repository.UserRepository;
@@ -17,16 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User signUp(SignUpRequestDto signUpRequestDto) {
+    public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
 
-        if(userRepository.existsByUserName(signUpRequestDto.getUserName()))
+        if (userRepository.existsByUserName(signUpRequestDto.getUserName()))
             throw new DuplicateUserNameException();
 
         User user = User.builder()
@@ -35,15 +36,16 @@ public class AuthServiceImpl implements AuthService{
                 .name(signUpRequestDto.getName())
                 .userRole(UserRole.ROLE_USER)
                 .build();
-       return userRepository.save(user);
+
+        return new SignUpResponseDto(userRepository.save(user));
     }
 
     @Override
     public LoginResponseDto signin(LogInRequestDto logInRequestDto) {
         User user = userRepository.findByUserName(logInRequestDto.getUserName()).orElseThrow(WrongLoginInfoException::new);
 
-        if(!passwordEncoder.matches(logInRequestDto.getPassword(),user.getPassword()))
+        if (!passwordEncoder.matches(logInRequestDto.getPassword(), user.getPassword()))
             throw new WrongLoginInfoException();
-        return new LoginResponseDto(jwtProvider.generateAccessToken(user.getId(),user.getUserRole()));
+        return new LoginResponseDto(jwtProvider.generateAccessToken(user.getId(), user.getUserRole()));
     }
 }

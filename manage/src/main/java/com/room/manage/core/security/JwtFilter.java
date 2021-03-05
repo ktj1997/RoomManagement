@@ -2,6 +2,7 @@ package com.room.manage.core.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.room.manage.api.auth.exception.NotBearerTokenException;
+import com.room.manage.api.common.Response;
 import com.room.manage.core.exception.ExceptionCode;
 import com.room.manage.core.exception.ExceptionResponse;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,23 +30,24 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try{
+        try {
             SecurityContextHolder.getContext().setAuthentication(jwtProvider.getAuthentication(request.getHeader("Authorization")));
-            filterChain.doFilter(request,response);
-        }catch(SignatureException e){
-            sendErrorMessage(response,ExceptionCode.INVALID_TOKEN);
-        }catch(MalformedJwtException e){
-            sendErrorMessage(response,ExceptionCode.MALFORMED_TOKEN);
-        }catch(ExpiredJwtException e){
-            sendErrorMessage(response,ExceptionCode.EXPIRE_TOKEN);
-        }catch(NotBearerTokenException e){
-            sendErrorMessage(response,ExceptionCode.NOT_BEARER_FORMAT);
+            filterChain.doFilter(request, response);
+        } catch (SignatureException e) {
+            sendErrorMessage(response, ExceptionCode.INVALID_TOKEN);
+        } catch (MalformedJwtException e) {
+            sendErrorMessage(response, ExceptionCode.MALFORMED_TOKEN);
+        } catch (ExpiredJwtException e) {
+            sendErrorMessage(response, ExceptionCode.EXPIRE_TOKEN);
+        } catch (NotBearerTokenException e) {
+            sendErrorMessage(response, ExceptionCode.NOT_BEARER_FORMAT);
         }
     }
+
     private void sendErrorMessage(HttpServletResponse res, ExceptionCode code) throws IOException {
         res.setStatus(HttpServletResponse.SC_FORBIDDEN);
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        res.getWriter().write(objectMapper.writeValueAsString(new ExceptionResponse(HttpStatus.FORBIDDEN,code)));
+        res.getWriter().write(objectMapper.writeValueAsString(new Response(HttpStatus.FORBIDDEN, new ExceptionResponse(code))));
 
     }
 }
