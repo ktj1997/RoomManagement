@@ -34,8 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void renewalFcmToken(String token) {
+    public String renewalFcmToken(String token) {
         User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         user.setFcmToken(token);
+        return user.getFcmToken();
     }
 }

@@ -10,5 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, RoomId> {
-    List<Room> findAll();
 }

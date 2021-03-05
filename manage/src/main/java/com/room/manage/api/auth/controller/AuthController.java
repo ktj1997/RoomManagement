@@ -4,12 +4,11 @@ import com.room.manage.api.auth.model.dto.LogInRequestDto;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.model.dto.LoginResponseDto;
 import com.room.manage.api.auth.service.AuthService;
+import com.room.manage.api.common.Response;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,16 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
+    @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation("회원가입")
     @PostMapping("/signup")
-    public void signUp(@RequestBody SignUpRequestDto signUpRequestDto)
-    {
-         authService.signUp(signUpRequestDto);
+    public Response signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
+        return new Response(HttpStatus.CREATED, authService.signUp(signUpRequestDto));
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation("로그인")
     @PostMapping("/login")
-    public LoginResponseDto loginResponseDto(@RequestBody LogInRequestDto logInRequestDto){
-        return authService.signin(logInRequestDto);
+    public Response loginResponseDto(@RequestBody LogInRequestDto logInRequestDto) {
+        return new Response(HttpStatus.OK, authService.signin(logInRequestDto));
     }
 }

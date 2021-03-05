@@ -3,6 +3,7 @@ package com.room.manage.core.exception;
 
 import com.room.manage.api.auth.exception.DuplicateUserNameException;
 import com.room.manage.api.auth.exception.WrongLoginInfoException;
+import com.room.manage.api.common.Response;
 import com.room.manage.api.participation.exception.*;
 import com.room.manage.api.participation.exception.AlreadyMaximumParticipantException;
 import com.room.manage.api.room.exception.RoomNotExistException;
@@ -17,67 +18,65 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value ={DuplicateUserNameException.class, WrongLoginInfoException.class} )
+    @ExceptionHandler(value = {DuplicateUserNameException.class, WrongLoginInfoException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse AuthExceptionHandler(Exception e)
-    {
+    public Response AuthExceptionHandler(Exception e) {
         ExceptionCode exceptionCode = null;
-        if(e instanceof DuplicateUserNameException)
+        if (e instanceof DuplicateUserNameException)
             exceptionCode = ExceptionCode.DUPLICATE_USERNAME;
         else
             exceptionCode = ExceptionCode.WRONG_LOGIN_INFO;
 
-        return new ExceptionResponse(HttpStatus.BAD_REQUEST,exceptionCode);
+        return new Response(HttpStatus.BAD_REQUEST, new ExceptionResponse(exceptionCode));
     }
 
     @ExceptionHandler(value =
             {InvalidTimeRequestException.class, NoParticipationException.class,
-                    AlreadyMaximumParticipantException.class,AlreadySleepStatusException.class, AlreadyParticipateException.class, RemainSleepNumZeroException.class})
+                    AlreadyMaximumParticipantException.class, AlreadySleepStatusException.class, AlreadyParticipateException.class, RemainSleepNumZeroException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse ParticipationExceptionHandler(Exception e)
-    {
+    public Response ParticipationExceptionHandler(Exception e) {
         ExceptionCode exceptionCode = null;
 
-        if(e instanceof InvalidTimeRequestException)
-           exceptionCode = ExceptionCode.INVALID_TIME_REQUEST;
-        else if(e instanceof NoParticipationException)
+        if (e instanceof InvalidTimeRequestException)
+            exceptionCode = ExceptionCode.INVALID_TIME_REQUEST;
+        else if (e instanceof NoParticipationException)
             exceptionCode = ExceptionCode.NO_PARTICIPATION;
-        else if(e instanceof AlreadyParticipateException)
+        else if (e instanceof AlreadyParticipateException)
             exceptionCode = ExceptionCode.ALREADY_PARTICIPATION;
-        else if(e instanceof RemainSleepNumZeroException)
+        else if (e instanceof RemainSleepNumZeroException)
             exceptionCode = ExceptionCode.SLEEP_NUM_ZERO;
-        else if(e instanceof AlreadySleepStatusException)
+        else if (e instanceof AlreadySleepStatusException)
             exceptionCode = ExceptionCode.ALREADY_PARTICIPATION;
-        return new ExceptionResponse(HttpStatus.BAD_REQUEST,exceptionCode);
+        return new Response(HttpStatus.BAD_REQUEST, new ExceptionResponse(exceptionCode));
     }
+
     @ExceptionHandler({AlarmExecutionException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionResponse SocketConnectionExceptionHandler(Exception e)
-    {
+    public Response SocketConnectionExceptionHandler(Exception e) {
         ExceptionCode exceptionCode = null;
-        if(e instanceof AlarmExecutionException)
+        if (e instanceof AlarmExecutionException)
             exceptionCode = ExceptionCode.CONNECTION_CLOSED;
-        return new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR,exceptionCode);
+        return new Response(HttpStatus.INTERNAL_SERVER_ERROR, new ExceptionResponse(exceptionCode));
     }
 
     @ExceptionHandler(RoomNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse RoomExceptionHandler(Exception e){
+    public Response RoomExceptionHandler(Exception e) {
         ExceptionCode exceptionCode = null;
 
-        if(e instanceof RoomNotExistException)
+        if (e instanceof RoomNotExistException)
             exceptionCode = ExceptionCode.ROOM_NOT_EXIST;
-        return new ExceptionResponse(HttpStatus.BAD_REQUEST,exceptionCode);
+        return new Response(HttpStatus.BAD_REQUEST, new ExceptionResponse(exceptionCode));
     }
 
     @ExceptionHandler(UserNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse UserExceptionHandler(Exception e){
+    public Response UserExceptionHandler(Exception e) {
         ExceptionCode exceptionCode = null;
-        if(e instanceof UserNotExistException)
+        if (e instanceof UserNotExistException)
             exceptionCode = ExceptionCode.USER_NOT_EXIST;
 
-        return new ExceptionResponse(HttpStatus.BAD_REQUEST,exceptionCode);
+        return new Response(HttpStatus.BAD_REQUEST, new ExceptionResponse(exceptionCode));
     }
 
 }

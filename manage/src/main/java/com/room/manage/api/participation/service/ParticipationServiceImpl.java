@@ -4,6 +4,7 @@ import com.room.manage.api.participation.exception.*;
 import com.room.manage.api.participation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.participation.model.dto.request.SleepRequestDto;
+import com.room.manage.api.participation.model.dto.response.ExitResponseDto;
 import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.participation.model.entity.AlarmType;
 import com.room.manage.api.participation.model.entity.Participation;
@@ -82,7 +83,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     @ExitLog
     @Transactional(noRollbackFor = AlarmExecutionException.class)
-    public void exitRoom(Long userId) {
+    public ExitResponseDto exitRoom(Long userId) {
         try {
             User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
             Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
@@ -94,6 +95,7 @@ public class ParticipationServiceImpl implements ParticipationService {
             participationRepository.delete(participation);
             sendAlarm.send(user, room, AlarmType.EXIT);
 
+            return new ExitResponseDto(participation);
         } catch (ResourceAccessException e) {
             throw new AlarmExecutionException();
         }

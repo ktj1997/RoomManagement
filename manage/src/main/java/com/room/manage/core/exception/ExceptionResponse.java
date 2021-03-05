@@ -11,13 +11,10 @@ import java.util.Date;
 public class ExceptionResponse {
     String message;
     String code;
-    int httpStatus;
     Date timeStamp = new Date();
 
-    public ExceptionResponse(HttpStatus status,ExceptionCode code)
-    {
+    public ExceptionResponse(ExceptionCode code) {
         this.message = code.getMessage();
         this.code = code.getCode();
-        this.httpStatus = status.value();
     }
 }

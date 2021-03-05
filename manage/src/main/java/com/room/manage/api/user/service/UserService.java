@@ -4,5 +4,5 @@ import com.room.manage.api.participation.model.dto.response.ParticipationRespons
 
 public interface UserService {
     ParticipationResponseDto findMyParticipation();
-    void renewalFcmToken(String token);
+    String renewalFcmToken(String token);
 }
