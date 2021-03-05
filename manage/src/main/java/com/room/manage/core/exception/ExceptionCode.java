@@ -35,7 +35,7 @@ public enum ExceptionCode {
      * User Exception
      */
 
-    USER_NOT_EXIST("USER=001","존재하지 않는 사용자 입니다.");
+    USER_NOT_EXIST("USER-001","존재하지 않는 사용자 입니다.");
 
 
     private final String code;

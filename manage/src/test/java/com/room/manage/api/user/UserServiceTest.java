@@ -1,29 +1,30 @@
 package com.room.manage.api.user;
+
+import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
+import com.room.manage.api.auth.model.dto.SignUpResponseDto;
 import com.room.manage.api.auth.service.AuthService;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.factory.CommonFactory;
 import com.room.manage.api.participation.exception.NoParticipationException;
 import com.room.manage.api.participation.service.ParticipationService;
-import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.service.UserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-public class UserServiceTest{
+public class UserServiceTest extends IntegrationTest {
 
     @Autowired
     UserService userService;
@@ -37,25 +38,42 @@ public class UserServiceTest{
     @Autowired
     ParticipationService participationService;
 
-    private User user;
+    private SignUpResponseDto signUpResponseDto;
 
     @BeforeEach
-    void setUser()
-    {
+    void setUser() {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
-        user = authService.signUp(signUpRequestDto);
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getId(),"", List.of(new SimpleGrantedAuthority(user.getUserRole().toString()))));
+        signUpResponseDto = authService.signUp(signUpRequestDto);
     }
 
 
     @Test
     @DisplayName("유저의 참여정보 리턴 테스트")
-    public void findParticipationTest()
-    {
-        Assertions.assertAll(
-                () -> assertThrows(NoParticipationException.class,() ->userService.findMyParticipation()),
-                () -> assertDoesNotThrow(() -> participationService.joinRoom(new ParticipationRequestDto("3","B",commonFactory.participationFactory.getDay()+"-22:50"),null)),
-                () -> assertDoesNotThrow(() -> userService.findMyParticipation())
-        );
+    public void findParticipationTest() throws Exception {
+        assertThrows(NoParticipationException.class, () -> userService.findMyParticipation(signUpResponseDto.getId()));
+        assertDoesNotThrow(() -> participationService.joinRoom(signUpResponseDto.getId(), new ParticipationRequestDto("3", "B", commonFactory.participationFactory.getDay() + "-22:50"), null));
+        ParticipationResponseDto participationResponseDto = assertDoesNotThrow(() -> userService.findMyParticipation(signUpResponseDto.getId()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/participation")
+                .header("Authorization", accessToken)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("data.floor").value(participationResponseDto.getFloor()))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.field").value(participationResponseDto.getField()))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.startTime").value(participationResponseDto.getStartTime()))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.finishTime").value(participationResponseDto.getFinishTime()))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.remainSleepNum").value(participationResponseDto.getRemainSleepNum()))
+                .andExpect(MockMvcResultMatchers.jsonPath("data.participationStatus").value(participationResponseDto.getParticipationStatus().toString()));
+    }
+
+    /**
+     * 참여중이 아니라면 테스트 실패
+     */
+    @Test
+    void FailedWhenUserNotParticipate() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/participation")
+                .header("Authorization", accessToken)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserFactory {
-    private String userName = "ktj7916";
-    private String name = "kim";
+    public String userName = "ktj7916";
+    public String name = "김태준";
     private String password ="1q2w3e4r!!";
 
 

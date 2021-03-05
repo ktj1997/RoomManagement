@@ -3,6 +3,7 @@ package com.room.manage.api.user.controller;
 import com.room.manage.api.common.Response;
 import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.user.service.UserService;
+import com.room.manage.core.util.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +20,15 @@ public class UserController {
     @ApiOperation("내가 참여중인 스터디룸")
     @GetMapping("/participation")
     public Response getParticipation() {
-        return new Response(HttpStatus.OK, userService.findMyParticipation());
+        Long userId = SecurityUtil.getUserIdFromToken();
+        return new Response(HttpStatus.OK, userService.findMyParticipation(userId));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Firebase 토큰 갱신")
     @PutMapping("/token")
     public Response renewalFcmToken(@RequestParam String token) {
-        return new Response(HttpStatus.OK, userService.renewalFcmToken(token));
+        Long userId = SecurityUtil.getUserIdFromToken();
+        return new Response(HttpStatus.OK, userService.renewalFcmToken(userId, token));
     }
 }

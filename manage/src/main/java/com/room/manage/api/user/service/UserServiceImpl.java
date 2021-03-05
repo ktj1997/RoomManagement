@@ -21,12 +21,13 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 내가 사용하고있는 Room이 있는지 정보확인
+     *
      * @return 참여장보
      */
     @Override
     @Transactional(readOnly = true)
-    public ParticipationResponseDto findMyParticipation() {
-        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
+    public ParticipationResponseDto findMyParticipation(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
         return new ParticipationResponseDto(participation);
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String renewalFcmToken(String token) {
+    public String renewalFcmToken(Long userId, String token) {
         User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
         user.setFcmToken(token);
         return user.getFcmToken();
