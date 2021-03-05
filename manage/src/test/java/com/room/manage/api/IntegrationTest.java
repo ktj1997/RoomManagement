@@ -8,6 +8,7 @@ import com.room.manage.api.room.repository.RoomRepository;
 import com.room.manage.api.room.service.RoomService;
 import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.api.user.service.UserService;
+import com.room.manage.core.security.JwtProvider;
 import com.room.manage.factory.CommonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class IntegrationTest {
+
+    @Autowired
+    protected JwtProvider jwtProvider;
 
     @Autowired
     protected MockMvc mockMvc;
@@ -49,7 +53,4 @@ public class IntegrationTest {
 
     @Autowired
     protected ObjectMapper objectMapper;
-
-    protected String accessToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE2MTQ5MzgyNDYsImV4cCI6MzE5MTczODI0Nn0.odlnSHwJ8Bx3ORUCE1fLofn8nELJMvXc6xZrzlr1QDQ";
-
 }

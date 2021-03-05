@@ -1,5 +1,6 @@
 package com.room.manage.api.participation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.model.dto.SignUpResponseDto;
@@ -7,6 +8,7 @@ import com.room.manage.api.participation.exception.InvalidTimeRequestException;
 import com.room.manage.api.participation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.api.user.model.entity.UserRole;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,11 +20,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class ExtendTimeTest extends IntegrationTest {
 
     private SignUpResponseDto signUpResponseDto;
+    private String accessToken;
 
     @BeforeEach
-    void setUser() {
+    void setUser() throws JsonProcessingException {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
         signUpResponseDto = authService.signUp(signUpRequestDto);
+        accessToken = "Bearer " + jwtProvider.generateAccessToken(signUpResponseDto.getId(),Enum.valueOf(UserRole.class,signUpResponseDto.getUserRole()));
     }
 
     @Test

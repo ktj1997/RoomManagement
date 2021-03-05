@@ -13,6 +13,7 @@ import com.room.manage.api.participation.model.dto.response.ParticipationRespons
 import com.room.manage.api.participation.model.entity.Participation;
 import com.room.manage.api.participation.model.entity.SleepReason;
 import com.room.manage.api.user.model.entity.User;
+import com.room.manage.api.user.model.entity.UserRole;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -20,19 +21,19 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SleepTest extends IntegrationTest {
 
     private SignUpResponseDto signUpResponseDto;
+    private String accessToken;
 
     @BeforeEach
-    void setUser() {
+    void setUser() throws JsonProcessingException {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
         signUpResponseDto = authService.signUp(signUpRequestDto);
+        accessToken = "Bearer " + jwtProvider.generateAccessToken(signUpResponseDto.getId(),Enum.valueOf(UserRole.class,signUpResponseDto.getUserRole()));
     }
 
     @Test
-    @Order(1)
     @DisplayName("성공적인 부재 테스트")
     void toSleepTest() throws Exception {
         SleepRequestDto sleepRequestDto = new SleepRequestDto(commonFactory.participationFactory.getDay() + "-22:40", SleepReason.TOILET);

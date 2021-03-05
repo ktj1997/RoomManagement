@@ -1,5 +1,6 @@
 package com.room.manage.api.participation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.model.dto.SignUpResponseDto;
@@ -10,6 +11,7 @@ import com.room.manage.api.participation.model.dto.request.ParticipationRequestD
 import com.room.manage.api.participation.model.entity.ParticipationStatus;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.model.entity.RoomId;
+import com.room.manage.api.user.model.entity.UserRole;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,19 +20,19 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class JoinTest extends IntegrationTest {
 
     private SignUpResponseDto signUpResponseDto;
+    private String accessToken;
 
     @BeforeEach
-    void setUser() {
+    void setUser() throws JsonProcessingException {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
         signUpResponseDto = authService.signUp(signUpRequestDto);
+        accessToken = "Bearer " + jwtProvider.generateAccessToken(signUpResponseDto.getId(),Enum.valueOf(UserRole.class,signUpResponseDto.getUserRole()));
     }
 
     @Test
-    @Order(1)
     @DisplayName("정상적인 참여 테스트")
     void successfulJoinTest() throws Exception {
         ParticipationRequestDto participationRequestDto =

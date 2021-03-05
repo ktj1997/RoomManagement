@@ -1,5 +1,6 @@
 package com.room.manage.api.room;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.model.dto.SignUpResponseDto;
@@ -7,6 +8,7 @@ import com.room.manage.api.participation.model.dto.request.ParticipationRequestD
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.dto.DetailRoomInfoDto;
 import com.room.manage.api.room.model.entity.Status;
+import com.room.manage.api.user.model.entity.UserRole;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,11 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoomServiceTest extends IntegrationTest {
 
     private SignUpResponseDto signUpResponseDto;
+    private String accessToken;
 
     @BeforeEach
-    void setUser() {
+    void setUser() throws JsonProcessingException {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
         signUpResponseDto = authService.signUp(signUpRequestDto);
+        accessToken = "Bearer " + jwtProvider.generateAccessToken(signUpResponseDto.getId(),Enum.valueOf(UserRole.class,signUpResponseDto.getUserRole()));
     }
 
     @Test

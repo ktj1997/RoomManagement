@@ -75,6 +75,7 @@ public class ScheduledTask {
          */
         /**
          * Room의 모든 상태 초기화
+         * Room의 모든 상태 초기화
          */
         participates.stream().forEach(it -> participationService.exitRoom(it.getParticipant().getId()));
         rooms.stream().forEach(it -> it.init());
@@ -85,7 +86,7 @@ public class ScheduledTask {
      * 1분은 딜레이가 있을수도 있어서
      */
     @DailyLog
-    @Scheduled(cron = "0 1 0 * * *")
+    @Scheduled(cron = "0 53 0 * * *")
     public void storeLogToS3() throws IOException {
         File dir = new File(System.getProperty("user.dir") + "/logs");
         Calendar cal = Calendar.getInstance();

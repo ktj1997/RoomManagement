@@ -67,11 +67,15 @@
             <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="com.room.manage.core.aop.ExitLogging" level="TRACE">
-        <appender-ref ref="EXIT_LOG" />
+    <logger name="com.room.manage.core.aop.DailyLogging" level="TRACE">
+        <appender-ref ref="EXIT_LOG"/>
+        <appender-ref ref="JOIN_LOG"/>
     </logger>
-    <logger name="com.room.manage.core.aop.JoinLogging" level="TRACE" >
-        <appender-ref ref="JOIN_LOG" />
+    <logger name="com.room.manage.core.aop.ExitLogging" level="TRACE">
+        <appender-ref ref="EXIT_LOG"/>
+    </logger>
+    <logger name="com.room.manage.core.aop.JoinLogging" level="TRACE">
+        <appender-ref ref="JOIN_LOG"/>
     </logger>
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

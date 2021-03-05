@@ -1,11 +1,13 @@
 package com.room.manage.api.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.room.manage.api.IntegrationTest;
 import com.room.manage.api.auth.model.dto.SignUpRequestDto;
 import com.room.manage.api.auth.model.dto.SignUpResponseDto;
 import com.room.manage.api.auth.service.AuthService;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
+import com.room.manage.api.user.model.entity.UserRole;
 import com.room.manage.factory.CommonFactory;
 import com.room.manage.api.participation.exception.NoParticipationException;
 import com.room.manage.api.participation.service.ParticipationService;
@@ -26,24 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class UserServiceTest extends IntegrationTest {
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    CommonFactory commonFactory;
-
-    @Autowired
-    AuthService authService;
-
-    @Autowired
-    ParticipationService participationService;
-
     private SignUpResponseDto signUpResponseDto;
+    private String accessToken;
 
     @BeforeEach
-    void setUser() {
+    void setUser() throws JsonProcessingException {
         SignUpRequestDto signUpRequestDto = commonFactory.userFactory.getSignUpRequestDto();
         signUpResponseDto = authService.signUp(signUpRequestDto);
+        accessToken = "Bearer " + jwtProvider.generateAccessToken(signUpResponseDto.getId(),Enum.valueOf(UserRole.class,signUpResponseDto.getUserRole()));
     }
 
 
