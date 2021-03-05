@@ -24,7 +24,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Firebase 토큰 갱신")
-    @GetMapping("/token")
+    @PutMapping("/token")
     public Response renewalFcmToken(@RequestParam String token) {
         return new Response(HttpStatus.OK, userService.renewalFcmToken(token));
     }
