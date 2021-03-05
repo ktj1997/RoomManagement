@@ -1,7 +1,9 @@
 package com.room.manage.core.aop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.room.manage.api.common.Response;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
+import com.room.manage.api.participation.model.dto.response.ParticipationResponseDto;
 import com.room.manage.api.participation.model.entity.Participation;
 import com.room.manage.api.user.exception.UserNotExistException;
 import com.room.manage.api.user.model.entity.User;
@@ -29,18 +31,12 @@ public class JoinLogging {
 
     @Around("@annotation(com.room.manage.core.aop.annotation.JoinLog)")
     public Object JoinLog(ProceedingJoinPoint pjp) throws Throwable {
-        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
-        ParticipationRequestDto participationRequestDto = null;
+        ParticipationResponseDto participationResponseDto = null;
         Object result = pjp.proceed();
 
         if (!(result instanceof Exception)) {
-            for (Object obj : pjp.getArgs()) {
-                if (obj instanceof ParticipationRequestDto) {
-                    participationRequestDto = (ParticipationRequestDto) obj;
-                    logger.trace(LogUtil.joinLogStringFormat(user.getUserName(), participationRequestDto));
-                    break;
-                }
-            }
+            participationResponseDto = (ParticipationResponseDto) ((Response<?>) result).getData();
+            logger.trace(LogUtil.joinLogStringFormat(participationResponseDto));
         }
         return result;
     }

@@ -8,9 +8,9 @@ import com.room.manage.api.participation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.participation.model.entity.Sleep;
 
 public interface ParticipationService {
-    ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto,String token);
-    ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto);
+    ParticipationResponseDto joinRoom(Long userId,ParticipationRequestDto participationRequestDto,String token);
+    ParticipationResponseDto toSleepStatus(Long userId,SleepRequestDto sleepRequestDto);
     ParticipationResponseDto toActiveStatus(Sleep sleep);
-    ParticipationResponseDto extendTime(ExtendTimeRequestDto extendTimeRequestDto);
+    ParticipationResponseDto extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto);
     ExitResponseDto exitRoom(Long userId);
 }

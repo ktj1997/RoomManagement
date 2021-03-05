@@ -22,7 +22,7 @@ public class ParticipationResponseDto {
      * 유저 이름
      */
     @ApiModelProperty("유저 이름")
-    String name;
+    String participant;
     /**
      * 참여하는 Room의 층
      */
@@ -64,7 +64,7 @@ public class ParticipationResponseDto {
 
     public ParticipationResponseDto(Participation participation){
         this.userId = participation.getParticipant().getId();
-        this.name = participation.getParticipant().getName();
+        this.participant = participation.getParticipant().getName();
         this.floor = participation.getRoom().getFloor();
         this.field = participation.getRoom().getField();
         this.startTime = DateUtil.formatToString(participation.getStartTime());
@@ -75,7 +75,7 @@ public class ParticipationResponseDto {
     }
     public ParticipationResponseDto(Participation participation, Sleep sleep){
         this.userId = participation.getParticipant().getId();
-        this.name = participation.getParticipant().getName();
+        this.participant = participation.getParticipant().getName();
         this.floor = participation.getRoom().getFloor();
         this.field = participation.getRoom().getField();
         this.startTime = DateUtil.formatToString(participation.getStartTime());

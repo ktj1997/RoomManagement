@@ -5,6 +5,8 @@ import com.room.manage.api.participation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
 import com.room.manage.api.participation.model.dto.request.SleepRequestDto;
 import com.room.manage.api.participation.service.ParticipationService;
+import com.room.manage.core.aop.annotation.ExitLog;
+import com.room.manage.core.aop.annotation.JoinLog;
 import com.room.manage.core.util.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +29,19 @@ public class ParticipationController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("입실")
     @PostMapping
+    @JoinLog
     public Response joinRoom(@RequestBody ParticipationRequestDto participationRequestDto, @RequestParam(required = false) String token) {
-        return new Response(HttpStatus.CREATED, participationService.joinRoom(participationRequestDto, token));
+        Long userId = SecurityUtil.getUserIdFromToken();
+        return new Response(HttpStatus.CREATED, participationService.joinRoom(userId,participationRequestDto, token));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("퇴실")
     @DeleteMapping
+    @ExitLog
     public Response exitRoom() {
-        return new Response(HttpStatus.OK, participationService.exitRoom(SecurityUtil.getUserIdFromToken()));
+        Long userId = SecurityUtil.getUserIdFromToken();
+        return new Response(HttpStatus.OK, participationService.exitRoom(userId));
     }
 
     /**
@@ -47,7 +53,8 @@ public class ParticipationController {
     @ApiOperation("시간 연장")
     @PutMapping("/extend")
     public Response extendParticipation(@RequestBody ExtendTimeRequestDto extendTimeRequestDto) {
-        return new Response(HttpStatus.OK, participationService.extendTime(extendTimeRequestDto));
+        Long userId = SecurityUtil.getUserIdFromToken();
+        return new Response(HttpStatus.OK, participationService.extendTime(userId,extendTimeRequestDto));
     }
 
     /**
@@ -60,6 +67,7 @@ public class ParticipationController {
     @ApiOperation("부재 신청")
     @PutMapping("/sleep")
     public Response toSleepStatus(@RequestBody SleepRequestDto sleepRequestDto) {
-        return new Response(HttpStatus.OK, participationService.toSleepStatus(sleepRequestDto));
+        Long userId = SecurityUtil.getUserIdFromToken();
+        return new Response(HttpStatus.OK, participationService.toSleepStatus(userId,sleepRequestDto));
     }
 }

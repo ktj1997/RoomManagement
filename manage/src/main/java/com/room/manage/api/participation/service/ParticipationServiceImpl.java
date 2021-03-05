@@ -45,12 +45,11 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final ParticipationCacheFunction participationCacheFunction;
 
     @Override
-    @JoinLog
     @Transactional(noRollbackFor = AlarmExecutionException.class)
-    public ParticipationResponseDto joinRoom(ParticipationRequestDto participationRequestDto, String token) {
+    public ParticipationResponseDto joinRoom(Long userId,ParticipationRequestDto participationRequestDto, String token) {
         Room room = roomRepository.findById(new RoomId(participationRequestDto.getFloor(), participationRequestDto.getField()))
                 .orElseThrow(RoomNotExistException::new);
-        User user = userRepository.findById(SecurityUtil.getUserIdFromToken())
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotExistException::new);
         Participation participation;
 
@@ -81,7 +80,6 @@ public class ParticipationServiceImpl implements ParticipationService {
      * 퇴실
      */
     @Override
-    @ExitLog
     @Transactional(noRollbackFor = AlarmExecutionException.class)
     public ExitResponseDto exitRoom(Long userId) {
         try {
@@ -109,8 +107,8 @@ public class ParticipationServiceImpl implements ParticipationService {
      * @param sleepRequestDto
      */
     @Override
-    public ParticipationResponseDto toSleepStatus(SleepRequestDto sleepRequestDto) {
-        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
+    public ParticipationResponseDto toSleepStatus(Long userId,SleepRequestDto sleepRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
         Room room = participation.getRoom();
 
@@ -150,8 +148,8 @@ public class ParticipationServiceImpl implements ParticipationService {
      * @param extendTimeRequestDto
      */
     @Override
-    public ParticipationResponseDto extendTime(ExtendTimeRequestDto extendTimeRequestDto) {
-        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
+    public ParticipationResponseDto extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 
         if (DateUtil.checkRequestDateIsNotPastAndValid(extendTimeRequestDto.getFinishTime())

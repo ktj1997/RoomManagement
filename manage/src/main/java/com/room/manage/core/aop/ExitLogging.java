@@ -1,10 +1,8 @@
 package com.room.manage.core.aop;
 
-import com.room.manage.api.user.exception.UserNotExistException;
-import com.room.manage.api.user.model.entity.User;
-import com.room.manage.api.user.repository.UserRepository;
+import com.room.manage.api.common.Response;
+import com.room.manage.api.participation.model.dto.response.ExitResponseDto;
 import com.room.manage.core.util.LogUtil;
-import com.room.manage.core.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,13 +18,16 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class ExitLogging {
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final UserRepository userRepository;
 
     @Around("@annotation(com.room.manage.core.aop.annotation.ExitLog)")
     public Object ExitLog(ProceedingJoinPoint pjp) throws Throwable {
-        User user = userRepository.findById(SecurityUtil.getUserIdFromToken()).orElseThrow(UserNotExistException::new);
+        ExitResponseDto exitResponseDto = null;
         Object result = pjp.proceed();
-        logger.trace(LogUtil.exitLogStringFormat(user.getUserName()));
+
+        if (!(result instanceof Exception)) {
+            exitResponseDto = (ExitResponseDto) ((Response<?>) result).getData();
+            logger.trace(LogUtil.exitLogStringFormat(exitResponseDto));
+        }
         return result;
     }
 }

@@ -15,12 +15,16 @@ import java.util.Date;
 public class ExitResponseDto {
 
     String participant;
+    String floor;
+    String field;
     String startTime;
     String finishTime;
 
 
     public ExitResponseDto(Participation participation) {
         this.participant = participation.getParticipant().getName();
+        this.floor = participation.getRoom().getFloor();
+        this.field = participation.getRoom().getField();
         this.startTime = DateUtil.formatToString(participation.getStartTime());
         this.finishTime = DateUtil.formatToString(new Date());
 
