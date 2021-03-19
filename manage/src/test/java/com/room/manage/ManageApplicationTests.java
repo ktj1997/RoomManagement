@@ -1,14 +1,10 @@
 package com.room.manage;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync
 @SpringBootTest
 class ManageApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
 
 }

@@ -1,5 +1,9 @@
 package com.room.manage.api.participation.service;
 
+import com.room.manage.api.participation.event.ExitSuccessEvent;
+import com.room.manage.api.participation.event.ParticipationSuccessEvent;
+import com.room.manage.api.participation.event.SleepFinishedEvent;
+import com.room.manage.api.participation.event.SleepSuccessEvent;
 import com.room.manage.api.participation.exception.*;
 import com.room.manage.api.participation.model.dto.request.ExtendTimeRequestDto;
 import com.room.manage.api.participation.model.dto.request.ParticipationRequestDto;
@@ -13,7 +17,7 @@ import com.room.manage.api.participation.model.entity.Sleep;
 import com.room.manage.api.participation.repository.ParticipationRepository;
 import com.room.manage.api.participation.repository.SleepRepository;
 import com.room.manage.api.participation.service.cache.ParticipationCacheFunction;
-import com.room.manage.api.participation.service.function.SendAlarm;
+import com.room.manage.api.alarm.service.AlarmService;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.model.entity.RoomId;
@@ -23,6 +27,7 @@ import com.room.manage.api.user.model.entity.User;
 import com.room.manage.api.user.repository.UserRepository;
 import com.room.manage.core.util.DateUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
@@ -38,12 +43,13 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final RoomRepository roomRepository;
     private final ParticipationRepository participationRepository;
     private final SleepRepository sleepRepository;
-    private final SendAlarm sendAlarm;
     private final ParticipationCacheFunction participationCacheFunction;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     @Override
     @Transactional(noRollbackFor = AlarmExecutionException.class)
-    public ParticipationResponseDto joinRoom(Long userId,ParticipationRequestDto participationRequestDto, String token) {
+    public ParticipationResponseDto joinRoom(Long userId, ParticipationRequestDto participationRequestDto, String token) {
         Room room = roomRepository.findById(new RoomId(participationRequestDto.getFloor(), participationRequestDto.getField()))
                 .orElseThrow(RoomNotExistException::new);
         User user = userRepository.findById(userId)
@@ -67,8 +73,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                     .type(ParticipationStatus.ACTIVE)
                     .room(room).build();
             participationRepository.save(participation);
-            room.join(participation);
-            sendAlarm.send(user, room, AlarmType.JOIN);
+            eventPublisher.publishEvent(new ParticipationSuccessEvent(room, user, AlarmType.JOIN, participation));
         }
         return new ParticipationResponseDto(participation);
     }
@@ -84,12 +89,9 @@ public class ParticipationServiceImpl implements ParticipationService {
             Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
             Room room = participation.getRoom();
 
-            room.exit(participation);
-            user.setFcmToken(null);
             participationCacheFunction.removeParticipationCache(participation.getId());
+            eventPublisher.publishEvent(new ExitSuccessEvent(room, user, AlarmType.EXIT, participation));
             participationRepository.delete(participation);
-            sendAlarm.send(user, room, AlarmType.EXIT);
-
             return new ExitResponseDto(participation);
         } catch (ResourceAccessException e) {
             throw new AlarmExecutionException();
@@ -104,7 +106,7 @@ public class ParticipationServiceImpl implements ParticipationService {
      * @param sleepRequestDto
      */
     @Override
-    public ParticipationResponseDto toSleepStatus(Long userId,SleepRequestDto sleepRequestDto) {
+    public ParticipationResponseDto toSleepStatus(Long userId, SleepRequestDto sleepRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
         Room room = participation.getRoom();
@@ -113,9 +115,8 @@ public class ParticipationServiceImpl implements ParticipationService {
             if (participation.getSleep() == null) {
                 if (DateUtil.formatToDate(sleepRequestDto.getDate()).before(participation.getFinishTime())) {
                     Sleep sleep = new Sleep(new Date(), DateUtil.formatToDate(sleepRequestDto.getDate()), sleepRequestDto.getReason(), participation);
-                    room.setSleepNum(room.getSleepNum() + 1);
-                    participation.toSleepStatus(sleep);
                     sleepRepository.save(sleep);
+                    eventPublisher.publishEvent(new SleepSuccessEvent(room, participation, sleep));
                     return new ParticipationResponseDto(participation, sleep);
                 } else
                     throw new InvalidTimeRequestException();
@@ -132,10 +133,8 @@ public class ParticipationServiceImpl implements ParticipationService {
     public ParticipationResponseDto toActiveStatus(Sleep sleep) {
         Participation participation = sleep.getParticipation();
         Room room = participation.getRoom();
-        room.setSleepNum(room.getSleepNum() - 1);
-        participation.toActiveStatus();
-
         sleepRepository.delete(sleep);
+        eventPublisher.publishEvent(new SleepFinishedEvent(room, participation));
         return new ParticipationResponseDto(participation);
     }
 
@@ -145,7 +144,7 @@ public class ParticipationServiceImpl implements ParticipationService {
      * @param extendTimeRequestDto
      */
     @Override
-    public ParticipationResponseDto extendTime(Long userId,ExtendTimeRequestDto extendTimeRequestDto) {
+    public ParticipationResponseDto extendTime(Long userId, ExtendTimeRequestDto extendTimeRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         Participation participation = participationRepository.findByParticipant(user).orElseThrow(NoParticipationException::new);
 

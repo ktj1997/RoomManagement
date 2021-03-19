@@ -1,4 +1,4 @@
-package com.room.manage.api.participation.service.function;
+package com.room.manage.api.alarm.service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -13,7 +13,7 @@ import com.room.manage.core.util.AlarmUtil;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FcmAlarm implements SendAlarm{
+public class FcmAlarmService implements AlarmService {
     private final String JoinMsgTitle ="참여한 인원이 있습니다!";
     private final String ExitMsgTitle ="퇴실한 인원이 있습니다!";
     @Override
