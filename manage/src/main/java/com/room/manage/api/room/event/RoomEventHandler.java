@@ -7,27 +7,27 @@ import com.room.manage.api.participation.event.SleepSuccessEvent;
 import com.room.manage.api.participation.model.entity.Participation;
 import com.room.manage.api.room.model.entity.Room;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
 public class RoomEventHandler {
 
     @Order(1)
-    @EventListener
+    @TransactionalEventListener
     public void participationSuccessEventHandler(ParticipationSuccessEvent event) {
         Room room = event.getRoom();
         room.join(event.getParticipation());
     }
-    @EventListener
+    @TransactionalEventListener
     public void exitSuccessEventHandler(ExitSuccessEvent event) {
         Room room = event.getRoom();
         room.exit(event.getParticipation());
     }
 
-    @EventListener
+    @TransactionalEventListener
     public void sleepSuccessEventHandler(SleepSuccessEvent event) {
         Room room = event.getRoom();
         Participation participation = event.getParticipation();
@@ -36,7 +36,7 @@ public class RoomEventHandler {
         participation.toSleepStatus(event.getSleep());
     }
 
-    @EventListener
+    @TransactionalEventListener
     public void sleepFinishedEventHandler(SleepFinishedEvent event) {
         Room room = event.getRoom();
         Participation participation = event.getParticipation();
