@@ -2,30 +2,34 @@ package com.room.manage.api.alarm.event;
 
 import com.room.manage.api.alarm.service.AlarmService;
 import com.room.manage.api.participation.event.ExitSuccessEvent;
-import com.room.manage.api.participation.event.ParticipationSuccessEvent;
+import com.room.manage.api.participation.event.joinSuccessEvent;
+import com.room.manage.api.participation.exception.AlarmExecutionException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
 public class AlarmEventHandler {
     private final AlarmService alarmService;
 
-    @Async
     @Order(2)
-    @TransactionalEventListener
-    public void joinAlarmEventHandler(ParticipationSuccessEvent event) {
+    @EventListener
+    public void joinAlarmEventHandler(joinSuccessEvent event) {
         alarmService.send(event.getUser(), event.getRoom(), event.getType());
     }
 
-    @Async
     @Order(2)
-    @TransactionalEventListener
+    @EventListener
     public void exitAlarmEventHandler(ExitSuccessEvent event) {
-        alarmService.send(event.getUser(), event.getRoom(), event.getType());
-        event.getUser().setFcmToken(null);
+        try {
+            alarmService.send(event.getUser(), event.getRoom(), event.getType());
+        } catch (AlarmExecutionException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            event.getUser().setFcmToken(null);
+        }
     }
 }

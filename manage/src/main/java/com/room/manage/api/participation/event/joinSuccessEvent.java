@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ParticipationSuccessEvent {
+public class joinSuccessEvent {
     private Room room;
     private User user;
     private AlarmType type;

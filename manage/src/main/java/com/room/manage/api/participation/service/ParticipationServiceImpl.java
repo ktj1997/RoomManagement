@@ -1,7 +1,7 @@
 package com.room.manage.api.participation.service;
 
 import com.room.manage.api.participation.event.ExitSuccessEvent;
-import com.room.manage.api.participation.event.ParticipationSuccessEvent;
+import com.room.manage.api.participation.event.joinSuccessEvent;
 import com.room.manage.api.participation.event.SleepFinishedEvent;
 import com.room.manage.api.participation.event.SleepSuccessEvent;
 import com.room.manage.api.participation.exception.*;
@@ -17,7 +17,6 @@ import com.room.manage.api.participation.model.entity.Sleep;
 import com.room.manage.api.participation.repository.ParticipationRepository;
 import com.room.manage.api.participation.repository.SleepRepository;
 import com.room.manage.api.participation.service.cache.ParticipationCacheFunction;
-import com.room.manage.api.alarm.service.AlarmService;
 import com.room.manage.api.room.exception.RoomNotExistException;
 import com.room.manage.api.room.model.entity.Room;
 import com.room.manage.api.room.model.entity.RoomId;
@@ -35,8 +34,8 @@ import org.springframework.web.client.ResourceAccessException;
 import java.util.Date;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class ParticipationServiceImpl implements ParticipationService {
 
     private final UserRepository userRepository;
@@ -73,7 +72,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                     .type(ParticipationStatus.ACTIVE)
                     .room(room).build();
             participationRepository.save(participation);
-            eventPublisher.publishEvent(new ParticipationSuccessEvent(room, user, AlarmType.JOIN, participation));
+            eventPublisher.publishEvent(new joinSuccessEvent(room, user, AlarmType.JOIN, participation));
         }
         return new ParticipationResponseDto(participation);
     }
@@ -90,8 +89,8 @@ public class ParticipationServiceImpl implements ParticipationService {
             Room room = participation.getRoom();
 
             participationCacheFunction.removeParticipationCache(participation.getId());
-            eventPublisher.publishEvent(new ExitSuccessEvent(room, user, AlarmType.EXIT, participation));
             participationRepository.delete(participation);
+            eventPublisher.publishEvent(new ExitSuccessEvent(room, user, AlarmType.EXIT, participation));
             return new ExitResponseDto(participation);
         } catch (ResourceAccessException e) {
             throw new AlarmExecutionException();
